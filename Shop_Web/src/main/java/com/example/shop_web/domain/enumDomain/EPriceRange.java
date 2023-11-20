@@ -1,4 +1,4 @@
-package com.example.shop_web.domain;
+package com.example.shop_web.domain.enumDomain;
 
 public enum EPriceRange {
     DEFAULT(7, "Price Range"),
