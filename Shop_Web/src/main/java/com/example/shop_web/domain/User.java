@@ -1,5 +1,6 @@
 package com.example.shop_web.domain;
 
+import com.example.shop_web.domain.enumDomain.EGender;
 import jakarta.persistence.*;
 import lombok.*;
 

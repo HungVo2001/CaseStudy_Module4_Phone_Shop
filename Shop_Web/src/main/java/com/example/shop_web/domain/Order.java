@@ -1,5 +1,6 @@
 package com.example.shop_web.domain;
 
+import com.example.shop_web.domain.enumDomain.EStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private  EStatus status;
+    private EStatus status;
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private  User user;
@@ -31,6 +32,7 @@ public class Order {
     private String shippingCode;
     private String receiverName;
     private String email;
+    private String phone;
     @OneToOne
     @JoinColumn(name = "location_region_id", referencedColumnName = "id", nullable = false)
     private LocationRegion locationRegion;

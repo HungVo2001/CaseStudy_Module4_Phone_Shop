@@ -24,8 +24,6 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "branch_id", referencedColumnName = "id", nullable = false)
     private Branch branch;
-
-
     private BigDecimal price;
     private int quantity;
     private String warrantyPeriod;
