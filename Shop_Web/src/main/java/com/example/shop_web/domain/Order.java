@@ -29,4 +29,10 @@ public class Order {
     private BigDecimal totalAmount;
     @Column(name = "shipping_code")
     private String shippingCode;
+    private String receiverName;
+    private String email;
+    @OneToOne
+    @JoinColumn(name = "location_region_id", referencedColumnName = "id", nullable = false)
+    private LocationRegion locationRegion;
+
 }
