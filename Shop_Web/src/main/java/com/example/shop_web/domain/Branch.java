@@ -5,12 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Table(name = "customers")
 @Entity
+@Table(name = "branchs")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Customer {
+public class Branch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

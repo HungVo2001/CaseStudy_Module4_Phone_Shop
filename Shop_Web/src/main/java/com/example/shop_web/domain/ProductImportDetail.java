@@ -5,21 +5,22 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "images")
+@Table(name = "product_import_details")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Image {
+public class ProductImportDetail {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private int quantity;
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     private Product product;
+    @ManyToOne
+    @JoinColumn(name = "product_import_id", referencedColumnName = "id", nullable = false)
+    private ProductImport productImport;
 }

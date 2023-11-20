@@ -1,24 +1,28 @@
 package com.example.shop_web.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.sql.Date;
 
-@Table(name = "carts")
 @Entity
-@NoArgsConstructor
+@Table(name = "product_imports")
 @Getter
 @Setter
-public class Cart {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProductImport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
-    private   User user;
+    private String code;
+    @Column(name = "import_date")
+    private Date importDate;
     @Column(name = "total_amount")
-    private  BigDecimal totalAmount;
+    private BigDecimal totalAmount;
+
 }
