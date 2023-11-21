@@ -3,36 +3,36 @@
 
 <head>
     <title>Shop Phone Web</title>
-    <th:block th:replace="layout_home/header" />
+    <th:block th:replace="layout/layout_home/header" />
 </head>
 
 <body>
 <div class="container-fluid">
 
-    <th:block th:replace="layout_home/topbar" />
+    <th:block th:replace="layout/layout_home/topbar" />
 
-    <th:block th:replace="layout_home/navbar" />
-
-
-    <th:block th:replace="layout_home/feature" />
+    <th:block th:replace="layout/layout_home/navbar" />
 
 
-    <th:block th:replace="layout_home/bestSale" />
+    <th:block th:replace="layout/layout_home/feature" />
 
 
-    <th:block th:replace="layout_home/productShow" />
+    <th:block th:replace="layout/layout_home/bestSale" />
+
+
+    <th:block th:replace="layout/layout_home/productShow" />
 
 
     <!-- Vendor Start -->
-    <th:block th:replace="layout_home/vender" />
+    <th:block th:replace="layout/layout_home/vender" />
 
     <footer>
-        <th:block th:replace="layout_home/footer" />
+        <th:block th:replace="layout/layout_home/footer" />
     </footer>
     <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 </div>
-    <th:block th:replace="layout_home/loading" />
-    <th:block th:replace="layout_home/toast" />
+    <th:block th:replace="layout/layout_home/loading" />
+    <th:block th:replace="layout/layout_home/toast" />
 
 
 <!--&lt;!&ndash; Modal Create &ndash;&gt;-->
@@ -50,13 +50,13 @@
 <!-- JavaScript Libraries -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-<script src="lib/easing/easing.min.js"></script>
-<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="/assets/asset/lib/easing/easing.min.js"></script>
+<script src="/assets/asset/lib/owlcarousel/owl.carousel.min.js"></script>
 
 <!-- Contact Javascript File -->
-<script src="mail/jqBootstrapValidation.min.js"></script>
-<script src="mail/contact.js"></script>
+<script src="/assets/asset/mail/jqBootstrapValidation.min.js"></script>
+<script src="/assets/asset/mail/contact.js"></script>
 
 <!-- Template Javascript -->
-<script src="js/main.js"></script>
+<script src="/assets/asset/js/main.js"></script>
 </html>

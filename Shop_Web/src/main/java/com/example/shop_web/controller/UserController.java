@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController {
     @GetMapping
     public String show(){
-        return "admin/createProduct";
+        return "layoutHome";
     }
 }
