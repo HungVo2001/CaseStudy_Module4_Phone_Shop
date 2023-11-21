@@ -1,5 +1,6 @@
 package com.example.shop_web.domain;
 
+import com.example.shop_web.domain.enumDomain.EPriceRange;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class Product {
     private String camera;
     private String operatingSystem;
     private String pin;
+    private EPriceRange ePriceRange;
     private Boolean deleted;
 
 }
