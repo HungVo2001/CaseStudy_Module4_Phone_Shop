@@ -1,6 +1,6 @@
 package com.example.shop_web.domain;
 
-import com.example.shop_web.domain.enumDomain.EPriceRange;
+import com.example.shop_web.domain.enumaration.EPriceRange;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,14 +27,12 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "branch_id", referencedColumnName = "id", nullable = false)
     private Branch branch;
-<<<<<<< HEAD
 
     @OneToMany(mappedBy = "product")
     private List<Image> images;
 
 
-=======
->>>>>>> 201b73342554c322b0b1d87c3cf3347c4aca8a5d
+
     private BigDecimal price;
     private int quantity;
     private String warrantyPeriod;
