@@ -27,6 +27,14 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "branch_id", referencedColumnName = "id", nullable = false)
     private Branch branch;
+<<<<<<< HEAD
+
+    @OneToMany(mappedBy = "product")
+    private List<Image> images;
+
+
+=======
+>>>>>>> 201b73342554c322b0b1d87c3cf3347c4aca8a5d
     private BigDecimal price;
     private int quantity;
     private String warrantyPeriod;
@@ -38,5 +46,9 @@ public class Product {
     private String pin;
     private EPriceRange ePriceRange;
     private Boolean deleted;
+
+    public Product(Long id) {
+        this.id = id;
+    }
 
 }
