@@ -1,7 +1,9 @@
 package com.example.shop_web.domain;
 
+
 import com.example.shop_web.domain.enumaration.EGender;
 import com.example.shop_web.domain.enumaration.ERole;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,9 +23,13 @@ public class User {
     private String userName;
     private String password;
     private String fullName;
+    private String username;
+
     private String email;
     private String address;
     private String phone;
+
+    @Enumerated(value = EnumType.STRING)
     private EGender gender;
     private Date dob;
     @OneToOne

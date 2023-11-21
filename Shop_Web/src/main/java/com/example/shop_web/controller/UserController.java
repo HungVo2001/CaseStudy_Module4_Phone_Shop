@@ -1,5 +1,6 @@
 package com.example.shop_web.controller;
 
+
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,7 +21,7 @@ public class UserController {
     @GetMapping("/home")
     public String showHomePage(Model model, Authentication authentication) {
         if(authentication == null){
-            return "user/home";
+            return "user/layoutHome";
         }
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
@@ -31,7 +32,7 @@ public class UserController {
         } else {
             model.addAttribute("isUser",true);
         }
-        return "user/home";
+        return "user/layoutHome";
     }
     @GetMapping("/default")
     public String defaultAfterLogin(Authentication authentication) {

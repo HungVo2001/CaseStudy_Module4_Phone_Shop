@@ -1,5 +1,6 @@
 package com.example.shop_web.domain;
 
+import com.example.shop_web.domain.dto.BranchResDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,4 +17,10 @@ public class Branch {
     private Long id;
 
     private String name;
+    public BranchResDTO toBranchReqDTO(){
+        return new BranchResDTO()
+                .setId(id)
+                .setBranchName(name);
+
+    }
 }
