@@ -1,7 +1,6 @@
 package com.example.shop_web.service.product;
 
 import com.example.shop_web.domain.Product;
-
 import java.util.List;
 import java.util.Optional;
 

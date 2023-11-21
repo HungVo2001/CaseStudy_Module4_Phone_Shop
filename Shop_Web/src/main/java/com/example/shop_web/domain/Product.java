@@ -25,6 +25,9 @@ public class Product {
     @JoinColumn(name = "branch_id", referencedColumnName = "id", nullable = false)
     private Branch branch;
 
+    @OneToMany(mappedBy = "product")
+    private List<Image> images;
+
 
     private BigDecimal price;
     private int quantity;
@@ -36,5 +39,9 @@ public class Product {
     private String operatingSystem;
     private String pin;
     private Boolean deleted;
+
+    public Product(Long id) {
+        this.id = id;
+    }
 
 }
