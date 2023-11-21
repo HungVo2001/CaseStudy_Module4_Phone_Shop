@@ -15,7 +15,8 @@ public interface ProductRepository  extends JpaRepository<Product,Long> {
             "pro.id, " +
             "pro.productName, " +
             "pro.branch, " +
-            "pro.quantity " +
+            "pro.quantity ," +
+            "pro.price " +
             ") " +
             "FROM Product AS pro"
     )

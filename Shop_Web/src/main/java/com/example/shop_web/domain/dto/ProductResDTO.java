@@ -8,6 +8,8 @@ import lombok.Setter;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -17,12 +19,14 @@ private Long id ;
 private String productName;
 private BranchResDTO branch;
 private int quantity;
+private BigDecimal price;
 //private ImageReqDTO imageReqDTO;
-public ProductResDTO(Long id, String productName, Branch branch  , int quantity ){
+public ProductResDTO(Long id, String productName, Branch branch  , int quantity , BigDecimal price){
     this.id = id;
     this.productName = productName;
     this.branch = branch.toBranchReqDTO();
     this.quantity = quantity;
+    this.price= price;
 }
 
 
