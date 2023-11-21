@@ -34,9 +34,6 @@ public class User {
     @OneToOne
     @JoinColumn(name = "location_region_id", referencedColumnName = "id", nullable = false)
     private LocationRegion locationRegion;
-//    @ManyToOne
-//    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
-//    private Role role;
     @Enumerated(value = EnumType.STRING)
     private ERole role;
     private Boolean deleted;

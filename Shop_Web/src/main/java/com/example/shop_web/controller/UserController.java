@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Collection;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("")
 @AllArgsConstructor
 public class UserController {
 
@@ -45,4 +45,5 @@ public class UserController {
             throw new IllegalStateException("Vai trò không hợp lệ.");
         }
     }
+
 }
