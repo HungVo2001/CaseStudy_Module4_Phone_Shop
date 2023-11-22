@@ -50,4 +50,9 @@ public class UserController {
     public String showHomePage() {
         return "user/layoutHome";
     }
+
+    @GetMapping("/login")
+    public String showLoginPage() {
+        return "user/login";
+    }
 }

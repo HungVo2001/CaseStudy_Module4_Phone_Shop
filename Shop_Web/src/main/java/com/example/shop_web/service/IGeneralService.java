@@ -8,7 +8,7 @@ public interface IGeneralService <E, T>  {
 
     Optional<E> findById(T id);
 
-    void save(E e);
+    E save(E e);
 
     void update(E e);
 

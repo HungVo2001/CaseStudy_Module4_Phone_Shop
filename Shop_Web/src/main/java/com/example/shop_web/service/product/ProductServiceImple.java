@@ -26,9 +26,10 @@ public class ProductServiceImple implements IProductService{
     }
 
     @Override
-    public void save(Product product) {
-
+    public Product save(Product product) {
+        return null;
     }
+
 
     @Override
     public void update(Product product) {
