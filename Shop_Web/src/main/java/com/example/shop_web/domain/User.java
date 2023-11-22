@@ -39,6 +39,7 @@ public class User {
 //    private Role role;
     @Enumerated(value = EnumType.STRING)
     private ERole role;
+    @Column(name = "deleted", columnDefinition = "TINYINT(1)")
     private Boolean deleted;
 
 }

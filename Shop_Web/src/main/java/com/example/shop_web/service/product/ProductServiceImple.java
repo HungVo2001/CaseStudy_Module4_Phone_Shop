@@ -41,7 +41,7 @@ public class ProductServiceImple implements IProductService{
     }
 
     @Override
-    public List<ProductResDTO> findAllProductResDTO() {
-        return productRepository.findAllProductResDTO() ;
+    public List<ProductResDTO> findAllProductResDTO(Boolean deleted) {
+        return productRepository.findAllProductResDTO(deleted) ;
     }
 }

@@ -4,6 +4,7 @@ import com.example.shop_web.domain.Product;
 import com.example.shop_web.domain.dto.ProductResDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,9 +19,9 @@ public interface ProductRepository  extends JpaRepository<Product,Long> {
             "pro.quantity ," +
             "pro.price " +
             ") " +
-            "FROM Product AS pro"
+            "FROM Product AS pro WHERE pro.deleted = :deleted"
     )
-    List<ProductResDTO> findAllProductResDTO();
+    List<ProductResDTO> findAllProductResDTO(@Param("deleted") Boolean deleted );
    ;
 
 

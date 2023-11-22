@@ -19,7 +19,7 @@ public class ProductRestController {
 
     @GetMapping
     public ResponseEntity<?> getAll() {
-        List<ProductResDTO> products = productService.findAllProductResDTO();
+        List<ProductResDTO> products = productService.findAllProductResDTO(false);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 }

@@ -47,20 +47,20 @@
                                 <tbody>
 
                                 </tbody>
-<!--                                    <tr>-->
-<!--                                        <td>${product.id}</td>-->
-<!--                                        <td>${product.productName}</td>-->
-<!--                                        <td>${product.quantity}</td>-->
-<!--                                        <td>${product.branchName}</td>-->
-<!--                                        <td><img src="../images${product.urlImage}" alt=""-->
-<!--                                                 style="width: 145px;height: 90px"></td>-->
-<!--                                        <td>${product.price}</td>-->
-<!--                                        <td>-->
-<!--                                            <a href="/product?action=edit&id=${product.id}" class="btn btn-primary ">Update</a>-->
-<!--                                            <a onclick="showConfirm(${product.id})"-->
-<!--                                               class="btn btn-primary ">Delete</a>-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
+                                <!--                                    <tr>-->
+                                <!--                                        <td>${product.id}</td>-->
+                                <!--                                        <td>${product.productName}</td>-->
+                                <!--                                        <td>${product.quantity}</td>-->
+                                <!--                                        <td>${product.branchName}</td>-->
+                                <!--                                        <td><img src="../images${product.urlImage}" alt=""-->
+                                <!--                                                 style="width: 145px;height: 90px"></td>-->
+                                <!--                                        <td>${product.price}</td>-->
+                                <!--                                        <td>-->
+                                <!--                                            <a href="/product?action=edit&id=${product.id}" class="btn btn-primary ">Update</a>-->
+                                <!--                                            <a onclick="showConfirm(${product.id})"-->
+                                <!--                                               class="btn btn-primary ">Delete</a>-->
+                                <!--                                        </td>-->
+                                <!--                                    </tr>-->
                             </table>
                         </div>
                     </div>
@@ -79,6 +79,92 @@
         <th:block th:replace="layout/layoutAdmin/modalLogout"/>
     </div>
 </div>
+<script>
+    const page = {
+        url: {
+            getAllProducts: AppUtils.BASE_PRODUCTS_API,
+            getProduct: AppUtils.BASE_PRODUCTS_API + "/"
+        },
+        elements: {},
+        loadData: {},
+        commands: {}
+    }
+    page.elements.btnBanElems = $(".ban");
+    page.elements.btnEditElems = $(".edit")
+
+    page.elements.bodyProduct = $("#dataTable tbody")
+    page.elements.loading = $('#loading');
+    page.commands.getAllProduct = async () => {
+        return await $.ajax({
+            url: page.url.getAllProducts
+        });
+    }
+    page.commands.getProduct = async (productId) => {
+        const response = await $.ajax({
+            url: page.url.getProduct + productId,
+            dataType: "json",
+        });
+        return response;
+    }
+
+
+    page.commands.handleClickEditButton = () => {
+        const btnBanElems = page.elements.btnBanElems;
+        $.each(btnBanElems, (index, item) => {
+            $(item).on("click", async () => {
+                const productId = $(item).data("id");
+                const product = await page.commands.getProduct(productId);
+
+
+                $("idEdit").val(productId)
+            })
+        })
+
+
+    }
+    page.commands.handleClickBanButton = () => {
+
+    }
+
+
+    page.commands.handleClickRow = () => {
+        page.commands.handleClickEditButton();
+        page.commands.handleClickBanButton();
+    }
+
+    page.loadData.renderProduct = async () => {
+        const products = await page.commands.getAllProduct();
+        products.forEach(item => {
+            const str = page.commands.renderProduct(item);
+            page.elements.bodyProduct.prepend(str)
+        })
+        page.commands.handleClickRow();
+    }
+
+
+    page.commands.renderProduct = (obj) => {
+        return `
+                               <td>${obj.id}</td>
+                               <td>${obj.productName}</td>
+                               <td>${obj.quantity}</td>
+                               <td>${obj.branch}</td>
+                               <td>${obj.branch}</td>
+                               <td>${obj.price}</td>
+                               <td>
+                                   <button class="btn btn-outline-success edit" data-id="${obj.id}">
+                                       <i class="fas fa-edit"></i>
+                                   </button>
+                                   <button class="btn btn-outline-success ban" data-id="${obj.id}">
+                                       <i class="fas fa-ban"></i>
+                                   </button>
+                               </td>
+                           </tr>
+`
+    }
+
+
+</script>
+
 
 <th:block th:replace="layout/layoutAdmin/foot"/>
 </body>

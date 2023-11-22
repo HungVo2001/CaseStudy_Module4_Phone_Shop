@@ -25,5 +25,6 @@ public class CartDetail {
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     private  Product product;
+    @Column(name = "checked", columnDefinition = "TINYINT(1)")
     private Boolean checked;
 }

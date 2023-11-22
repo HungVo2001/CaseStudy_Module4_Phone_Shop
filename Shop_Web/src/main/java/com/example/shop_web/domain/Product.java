@@ -42,7 +42,10 @@ public class Product {
     private String camera;
     private String operatingSystem;
     private String pin;
+    @Enumerated(value = EnumType.STRING)
     private EPriceRange ePriceRange;
+
+    @Column(name = "deleted", columnDefinition = "TINYINT(1)")
     private Boolean deleted;
 
     public Product(Long id) {

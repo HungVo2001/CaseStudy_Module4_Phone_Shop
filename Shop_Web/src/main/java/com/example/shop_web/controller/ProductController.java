@@ -18,7 +18,7 @@ public class ProductController {
 
     @GetMapping()
     public String showProduct(Model model) {
-        List<ProductResDTO> products = productService.findAllProductResDTO();
+        List<ProductResDTO> products = productService.findAllProductResDTO(false);
         model.addAttribute("products", products);
         return "admin/createProduct";
     }

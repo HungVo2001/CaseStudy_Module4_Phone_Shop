@@ -7,6 +7,6 @@ import com.example.shop_web.service.IGeneralService;
 import java.util.List;
 
 public interface IProductService extends IGeneralService<Product,Long> {
-    List<ProductResDTO> findAllProductResDTO();
+    List<ProductResDTO> findAllProductResDTO(Boolean deleted);
 
 }
