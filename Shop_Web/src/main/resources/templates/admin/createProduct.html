@@ -44,23 +44,6 @@
                                     <th>Action</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-
-                                </tbody>
-                                <!--                                    <tr>-->
-                                <!--                                        <td>${product.id}</td>-->
-                                <!--                                        <td>${product.productName}</td>-->
-                                <!--                                        <td>${product.quantity}</td>-->
-                                <!--                                        <td>${product.branchName}</td>-->
-                                <!--                                        <td><img src="../images${product.urlImage}" alt=""-->
-                                <!--                                                 style="width: 145px;height: 90px"></td>-->
-                                <!--                                        <td>${product.price}</td>-->
-                                <!--                                        <td>-->
-                                <!--                                            <a href="/product?action=edit&id=${product.id}" class="btn btn-primary ">Update</a>-->
-                                <!--                                            <a onclick="showConfirm(${product.id})"-->
-                                <!--                                               class="btn btn-primary ">Delete</a>-->
-                                <!--                                        </td>-->
-                                <!--                                    </tr>-->
                             </table>
                         </div>
                     </div>
@@ -136,8 +119,11 @@
         const products = await page.commands.getAllProduct();
         products.forEach(item => {
             const str = page.commands.renderProduct(item);
+            console.log(str)
             page.elements.bodyProduct.prepend(str)
+
         })
+        console.log(123)
         page.commands.handleClickRow();
     }
 
@@ -147,8 +133,8 @@
                                <td>${obj.id}</td>
                                <td>${obj.productName}</td>
                                <td>${obj.quantity}</td>
-                               <td>${obj.branch}</td>
-                               <td>${obj.branch}</td>
+                               <td>${obj.branch.branchName}</td>
+                               <td>${obj.branch.branchName}</td>
                                <td>${obj.price}</td>
                                <td>
                                    <button class="btn btn-outline-success edit" data-id="${obj.id}">
@@ -161,11 +147,13 @@
                            </tr>
 `
     }
+    $(async () => {
+      await page.loadData.renderProduct();
+
+    })
 
 
 </script>
-
-
 <th:block th:replace="layout/layoutAdmin/foot"/>
 </body>
 </html>

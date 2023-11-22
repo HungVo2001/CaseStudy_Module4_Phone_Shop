@@ -1,6 +1,6 @@
 class AppUtils {
 
-    static BASE_API_URL = 'http://localhost:8081/api'
+    static BASE_API_URL = 'http://localhost:8080/api'
     static BASE_PRODUCTS_API = this.BASE_API_URL + '/products'
 
     static showSuccess = (text) => {

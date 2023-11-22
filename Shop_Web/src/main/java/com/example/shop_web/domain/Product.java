@@ -43,6 +43,7 @@ public class Product {
     private String operatingSystem;
     private String pin;
     @Enumerated(value = EnumType.STRING)
+    @Column(name="price_range")
     private EPriceRange ePriceRange;
 
     @Column(name = "deleted", columnDefinition = "TINYINT(1)")
