@@ -6,6 +6,7 @@ import com.example.shop_web.domain.enumaration.ERole;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.sql.Date;
 
@@ -16,6 +17,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
+@Accessors(chain = true)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,8 +36,22 @@ public class User {
     @OneToOne
     @JoinColumn(name = "location_region_id", referencedColumnName = "id", nullable = false)
     private LocationRegion locationRegion;
-    @Enumerated(value = EnumType.STRING)
-    private ERole role;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
+    private Role role;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                '}';
+    }
+
+
     @Column(name = "deleted", columnDefinition = "TINYINT(1)")
     private Boolean deleted;
 

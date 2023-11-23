@@ -1,19 +1,41 @@
 package com.example.shop_web.util;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-public class AuthUtil {
-    public static String getCurrentPageWithMessageParameter() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String currentUrl = request.getRequestURI();
-        String queryString = request.getQueryString();
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-        if (queryString == null) {
-            return currentUrl + "?message=Login successfully";
-        } else {
-            return currentUrl + "?" + queryString + "&message=Login successfully";
+@Component
+public class AuthUtil {
+    public ResponseEntity<?> mapErrorToResponse(BindingResult result) {
+        List<FieldError> fieldErrors = result.getFieldErrors();
+        Map<String, String> errors = new HashMap<>();
+        for (FieldError fieldError : fieldErrors) {
+            errors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+    public String getPrincipalUsername() {
+        String userName;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            userName = ((UserDetails) principal).getUsername();
+//            userName = userName.substring(0, userName.indexOf("@"));
+        } else {
+            userName = principal.toString();
+        }
+
+        return userName;
     }
 }

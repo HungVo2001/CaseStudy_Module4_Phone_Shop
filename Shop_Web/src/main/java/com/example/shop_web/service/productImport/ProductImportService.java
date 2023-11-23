@@ -17,9 +17,10 @@ public class ProductImportService implements IProductImportService{
     }
 
     @Override
-    public void save(ProductImport productImport) {
-
+    public ProductImport save(ProductImport productImport) {
+        return null;
     }
+
 
     @Override
     public void update(ProductImport productImport) {

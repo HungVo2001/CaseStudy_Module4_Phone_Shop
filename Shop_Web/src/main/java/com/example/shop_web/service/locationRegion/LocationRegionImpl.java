@@ -17,9 +17,10 @@ public class LocationRegionImpl implements ILocationRegionService{
     }
 
     @Override
-    public void save(LocationRegion locationRegion) {
-
+    public LocationRegion save(LocationRegion locationRegion) {
+        return null;
     }
+
 
     @Override
     public void update(LocationRegion locationRegion) {
