@@ -21,6 +21,5 @@ public class Branch {
         return new BranchResDTO()
                 .setId(id)
                 .setBranchName(name);
-
     }
 }

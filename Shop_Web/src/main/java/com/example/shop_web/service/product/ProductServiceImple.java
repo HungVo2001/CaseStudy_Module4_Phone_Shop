@@ -22,12 +22,12 @@ public class ProductServiceImple implements IProductService{
 
     @Override
     public Optional<Product> findById(Long id) {
-        return Optional.empty();
+        return productRepository.findById(id);
     }
 
     @Override
     public void save(Product product) {
-
+productRepository.save(product);
     }
 
     @Override
@@ -43,5 +43,10 @@ public class ProductServiceImple implements IProductService{
     @Override
     public List<ProductResDTO> findAllProductResDTO(Boolean deleted) {
         return productRepository.findAllProductResDTO(deleted) ;
+    }
+
+    @Override
+    public ProductResDTO findProductResDTO(Long productId) {
+        return productRepository.findProductResDTO(productId);
     }
 }

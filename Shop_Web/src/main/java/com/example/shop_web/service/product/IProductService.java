@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface IProductService extends IGeneralService<Product,Long> {
     List<ProductResDTO> findAllProductResDTO(Boolean deleted);
-
+    ProductResDTO findProductResDTO(Long productId);
 }
