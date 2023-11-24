@@ -14,14 +14,14 @@ import lombok.Setter;
 @Setter
 public class UserRegisterReqDTO {
 
-    private String userName;
+    private String username;
     private String password;
     private String rePassword;
     private Long roleId;
 
     public User toUser(Role role) {
         return new User()
-                .setUserName(userName)
+                .setUsername(username)
                 .setPassword(password)
                 .setRole(role)
                 ;

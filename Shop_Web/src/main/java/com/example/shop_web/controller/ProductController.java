@@ -22,5 +22,10 @@ public class ProductController {
         model.addAttribute("products", products);
         return "admin/createProduct";
     }
-
+    @GetMapping("/ban")
+    public String showBanProduct(Model model) {
+        List<ProductResDTO> products = productService.findAllProductResDTO(true);
+        model.addAttribute("products", products);
+        return "admin/banListProduct";
+    }
 }

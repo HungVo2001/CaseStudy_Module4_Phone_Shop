@@ -4,7 +4,7 @@ import com.example.shop_web.domain.Branch;
 
 import com.example.shop_web.domain.dto.BranchResDTO;
 import com.example.shop_web.repository.BranchRepository;
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -27,7 +27,7 @@ public class BranchServiceImpl implements  IBranchService {
 
     @Override
     public Branch save(Branch branch) {
-        return null;
+        return branchRepository.save(branch);
     }
 
 
