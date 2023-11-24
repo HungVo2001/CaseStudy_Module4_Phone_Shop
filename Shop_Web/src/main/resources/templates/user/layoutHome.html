@@ -43,30 +43,21 @@
         loadData: {},
         commands: {}
     }
+    function showCart(idUser){
+        window.location.href = "http://localhost:8080/cart/" + idUser;
+    }
 
-    $('#showCart').on('click', async () => {
-
-    })
     async function fetchALlProduct() {
         return await $.ajax({
             url: "http://localhost:8080/api/products"
         })
     }
-    async function fetchCartByUser(idUser) {
-        return await $.ajax({
-            url: "http://localhost:8080/api/cart/" + idUser
-        })
-    }
+
     async function fetchALlCartDetail(idUser) {
         return await $.ajax({
             url: "http://localhost:8080/api/cart/" + idUser
         })
     }
-    // async function fetchALlBrand() {
-    //     return await $.ajax({
-    //         url: "http://localhost:8080/api/brand"
-    //     })
-    // }
 
     page.loadData.getAllProducts = async () => {
         const products = await fetchALlProduct();
