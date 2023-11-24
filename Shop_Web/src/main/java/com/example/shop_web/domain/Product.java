@@ -1,7 +1,7 @@
 package com.example.shop_web.domain;
 
 import com.example.shop_web.domain.enumaration.EPriceRange;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
