@@ -20,4 +20,20 @@ public class AdminController {
     public String showBranch() {
         return "admin/adminBranch";
     }
+    @GetMapping("/orders")
+    public String showOrder() {
+        return "admin/adminOrder";
+    }
+    @GetMapping("/orders/orderConfirming")
+    public String showOrderConfirming() {
+        return "admin/adminOrderConfirming";
+    }
+    @GetMapping("/orders/orderConfirmed")
+    public String showOrderConfirmed() {
+        return "admin/adminOrderConfirmed";
+    }
+    @GetMapping("/orders/orderCanceled")
+    public String showOrderCanceled() {
+        return "admin/adminOrderCanceled";
+    }
 }
