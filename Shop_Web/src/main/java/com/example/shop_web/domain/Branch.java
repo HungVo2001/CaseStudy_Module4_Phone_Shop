@@ -1,7 +1,7 @@
 package com.example.shop_web.domain;
 
 import com.example.shop_web.domain.dto.BranchResDTO;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

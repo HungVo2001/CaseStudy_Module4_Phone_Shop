@@ -2,7 +2,7 @@ package com.example.shop_web.service.role;
 
 import com.example.shop_web.domain.Role;
 import com.example.shop_web.repository.RoleRepository;
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

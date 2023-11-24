@@ -3,7 +3,7 @@ package com.example.shop_web.service.user;
 import com.example.shop_web.domain.User;
 import com.example.shop_web.domain.UserPrinciple;
 import com.example.shop_web.repository.UserRepository;
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

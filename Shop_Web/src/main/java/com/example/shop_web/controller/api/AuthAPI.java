@@ -10,7 +10,7 @@ import com.example.shop_web.service.jwt.JwtService;
 import com.example.shop_web.service.role.IRoleService;
 import com.example.shop_web.service.user.IUserService;
 import com.example.shop_web.util.AuthUtil;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -50,13 +50,14 @@ public class AuthAPI {
     @Autowired
     private AuthUtil authUtil;
 
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserRegisterReqDTO userRegisterReqDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             return authUtil.mapErrorToResponse(bindingResult);
 
-        Boolean existsByUsername = userService.existsByUsername(userRegisterReqDTO.getUserName());
+        Boolean existsByUsername = userService.existsByUsername(userRegisterReqDTO.getUsername());
 
         if (existsByUsername) {
             throw new EmailExistsException("Account already exists");
@@ -89,19 +90,19 @@ public class AuthAPI {
     public ResponseEntity<?> login(@RequestBody User user) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             String jwt = jwtService.generateTokenLogin(authentication);
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            User currentUser = userService.getByUsername(user.getUserName());
+            User currentUser = userService.getByUsername(user.getUsername());
 
             JwtResponse jwtResponse = new JwtResponse(
                     jwt,
                     currentUser.getId(),
                     userDetails.getUsername(),
-                    currentUser.getUserName(),
+                    currentUser.getUsername(),
                     userDetails.getAuthorities()
             );
 
