@@ -2,7 +2,7 @@ class AppUtils {
 
     static BASE_API_URL = 'http://localhost:8080/api'
     static BASE_PRODUCTS_API = this.BASE_API_URL + '/products'
-
+    static BASE_BRANCHS_API = this.BASE_API_URL + '/branchs'
     static showSuccess = (text) => {
         $.toast({
             heading: 'Success',

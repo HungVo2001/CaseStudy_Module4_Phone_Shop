@@ -1,3 +1,4 @@
+
 package com.example.shop_web.controller.api;
 
 import com.example.shop_web.domain.JwtResponse;
@@ -126,3 +127,4 @@ public class AuthAPI {
         }
     }
 }
+

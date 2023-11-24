@@ -1,3 +1,4 @@
+
 package com.example.shop_web.security;
 
 import com.example.shop_web.service.jwt.JwtService;
@@ -85,3 +86,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 }
+

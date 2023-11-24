@@ -1,3 +1,4 @@
+
 package com.example.shop_web.domain;
 
 import lombok.Data;
@@ -100,3 +101,4 @@ public class UserPrinciple implements UserDetails {
         return super.hashCode();
     }
 }
+

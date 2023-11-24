@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
 @Transactional
-public class ProductServiceImple implements IProductService{
+public class ProductServiceImple implements IProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
     @Override
     public List<Product> findAll() {
         return null;
@@ -22,12 +24,13 @@ public class ProductServiceImple implements IProductService{
 
     @Override
     public Optional<Product> findById(Long id) {
-        return Optional.empty();
+        return productRepository.findById(id);
     }
 
     @Override
     public Product save(Product product) {
-        return null;
+        return productRepository.save(product);
+
     }
 
 
@@ -43,6 +46,11 @@ public class ProductServiceImple implements IProductService{
 
     @Override
     public List<ProductResDTO> findAllProductResDTO(Boolean deleted) {
-        return productRepository.findAllProductResDTO(deleted) ;
+        return productRepository.findAllProductResDTO(deleted);
+    }
+
+    @Override
+    public ProductResDTO findProductResDTO(Long productId) {
+        return productRepository.findProductResDTO(productId);
     }
 }
