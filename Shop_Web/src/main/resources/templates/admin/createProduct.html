@@ -2,7 +2,7 @@
 <html lang="en">
 <meta charset="UTF-8">
 <head>
-    <title>List of customers</title>
+    <title>List of products</title>
     <th:block th:replace="layout/layoutAdmin/head"/>
 </head>
 <body>
@@ -69,7 +69,7 @@
                                 Create new Product
                             </button>
                             <span class="button-separator"></span>
-                            <a href="/products/restore" class="btn btn-primary">
+                            <a href="/products/ban" class="btn btn-primary">
                                 <i class="fas fa-ban"></i>
                                 Restore Product</a>
                         </div>
@@ -114,7 +114,8 @@
             getAllProducts: AppUtils.BASE_PRODUCTS_API,
             getProduct: AppUtils.BASE_PRODUCTS_API + "/",
             getAllBranchs: AppUtils.BASE_BRANCHS_API,
-            createProduct : AppUtils.BASE_PRODUCTS_API
+            createProduct: AppUtils.BASE_PRODUCTS_API,
+            banProduct:AppUtils.BASE_BANPRODUCT_API+"/",
         },
         elements: {},
         loadData: {},
@@ -167,7 +168,7 @@
 
     page.elements.bodyProduct = $("#dataTable tbody");
     page.elements.loading = $('#loading');
-
+    let productId = 0;
 
     page.commands.getAllProduct = async () => {
         return await $.ajax({
@@ -192,68 +193,48 @@
 
     page.commands.handleClickEditButton = () => {
         const btnEditElems = $(".edit");
-        const btnBanElems = $(".ban");
+
         $.each(btnEditElems, (index, item) => {
             $(item).on("click", async () => {
                 console.log("123")
-                 productId = $(item).data("id");
-                 await page.loadData.renderBranch(page.elements.branchEdit)
+                productId = $(item).data("id");
+                await page.loadData.renderBranch(page.elements.branchEdit)
                 const product = await page.commands.getProduct(productId);
-                // productName,
-                //     branchId,
-                //     price,
-                //     warrantyPeriod,
-                //     ram,
-                //     size,
-                //     color,
-                //     camera,
-                //     operatingSystem,
-                //     pin
+
                 $("#productNameEdit").val(product.productName)
                 $("#priceEdit").val(product.price)
                 $("#branchEdit").val(product.branch.id)
                 $("#warrantyEdit").val(product.warrantyPeriod)
                 $("#ramEdit").val(product.ram)
+                $("#sizeEdit").val(product.size)
                 $("#colorEdit").val(product.color)
                 $("#cameraEdit").val(product.camera)
                 $("#operatingEdit").val(product.operatingSystem)
                 $("#pinEdit").val(product.pin)
                 $("#modalEdit").modal("show");
-
             })
         })
+    }
+    page.commands.handleClickBanButton = () => {
+        const btnBanElems = $(".ban");
         $.each(btnBanElems, (index, item) => {
             $(item).on("click", async () => {
                 console.log("123")
                 productId = $(item).data("id");
                 const product = await page.commands.getProduct(productId);
-                // productName,
-                //     branchId,
-                //     price,
-                //     warrantyPeriod,
-                //     ram,
-                //     size,
-                //     color,
-                //     camera,
-                //     operatingSystem,
-                //     pin
                 $("#productNameBan").val(product.productName)
                 $("#priceBan").val(product.price)
                 $("#branchBan").val(product.branch.branchName)
                 $("#warrantyBan").val(product.warrantyPeriod)
                 $("#ramBan").val(product.ram)
+                $("#sizeBan").val(product.size)
                 $("#colorBan").val(product.color)
                 $("#cameraBan").val(product.camera)
                 $("#operatingBan").val(product.operatingSystem)
                 $("#pinBan").val(product.pin)
                 $("#modalBan").modal("show");
-
             })
         })
-
-    }
-    page.commands.handleClickBanButton = () => {
-
     }
 
 
@@ -261,7 +242,7 @@
         page.commands.handleClickEditButton();
         page.commands.handleClickBanButton();
     }
-    page.commands.unhandleClickRow = ()=>{
+    page.commands.unhandleClickRow = () => {
         const btnBanElems = page.elements.btnBanElems;
         $.each(btnBanElems, (index, item) => {
             $(item).off("click")
@@ -292,7 +273,7 @@
     }
 
     page.commands.renderProduct = (obj) => {
-        return `<tr>
+        return `<tr id="tr_${obj.id}">
                                <td>${obj.id}</td>
                                <td>${obj.productName}</td>
                                <td>${obj.quantity}</td>
@@ -317,7 +298,15 @@
         $('#frmCreate input').removeClass('error')
         $('#frmCreate label.error').remove()
     })
-
+    $('#modalEdit').on('hidden.bs.modal', async () => {
+        $("#modalEdit .area-error").empty().addClass("hide")
+        $('#frmEdit').trigger('reset')
+        $('#frmEdit input').removeClass('error')
+        $('#frmEdit label.error').remove()
+    })
+    $('#modalBan').on('hidden.bs.modal', async () => {
+        $("#modalBan .area-error").empty().addClass("hide")
+    })
 
     page.elements.frmCreate.validate({
         onkeyup: function (element) {
@@ -355,11 +344,51 @@
             this.defaultShowErrors();
         },
         submitHandler: () => {
-            page.commands.createCustomer()
+            page.commands.createProduct()
         }
     })
 
-    page.commands.createCustomer = () => {
+    page.elements.frmEdit.validate({
+        onkeyup: function (element) {
+            $(element).valid()
+        },
+        onclick: false,
+        onfocusout: false,
+        // rules: {
+        //     fullNameCre: {
+        //         required: true
+        //     },
+        //     addressCre: {
+        //         required: true
+        //     }
+        // },
+        // messages: {
+        //     fullNameCre: {
+        //         required: 'FullName is required'
+        //     },
+        //     addressCre: {
+        //         required: 'Address is required'
+        //     }
+        // },
+        errorLabelContainer: "#modalCreate .area-error",
+        errorPlacement: function (error, element) {
+            error.appendTo("#modalCreate .area-error");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#modalEdit .area-error").removeClass("hide").addClass("show");
+            } else {
+                $("#modalEdit .area-error").removeClass("show").addClass("hide").empty();
+                $("#frmEdit input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        submitHandler: () => {
+            page.commands.editProduct()
+        }
+    })
+
+    page.commands.createProduct = () => {
         const productName = page.elements.productNameCre.val();
         const branchId = page.elements.branchCre.val();
         const price = page.elements.priceCre.val();
@@ -397,21 +426,19 @@
                     // const str = page.commands.renderProduct(data)
                     // page.elements.bodyProduct.prepend(str);
                     page.elements.modalCreate.modal('hide');
-                    AppUtils.showSuccess("Thêm mới thành công")
-                    page.commands.unhandleClickRow();
-                    page.commands.handleClickRow();
+                    AppUtils.showSuccess("Create Product Successfully")
+
                 })
                 .fail((err) => {
                     const responseJSON = err.responseJSON
-                    AppUtils.showError("Thêm mới không thành công")
+                    AppUtils.showError("Create Product Unsuccessfully")
 
                     if (responseJSON) {
                         let str = '<ul>'
                         $.each(responseJSON, (k, v) => {
                             if (k.includes('.')) {
                                 str += `<li><label for="${k.split('.')[1] + 'Cre'}">${v}</label></li>`
-                            }
-                            else {
+                            } else {
                                 str += `<li><label for="${k + 'Cre'}">${v}</label></li>`
                             }
                         })
@@ -426,6 +453,112 @@
         }, 1000);
 
     }
+    page.commands.editProduct = () => {
+        const productName = page.elements.productNameEdit.val();
+        const branchId = page.elements.branchEdit.val();
+        const price = page.elements.priceEdit.val();
+        const warrantyPeriod = page.elements.warrantyEdit.val();
+        const ram = page.elements.ramEdit.val();
+        const size = page.elements.sizeEdit.val();
+        const color = page.elements.colorEdit.val();
+        const camera = page.elements.cameraEdit.val();
+        const operatingSystem = page.elements.operatingEdit.val();
+        const pin = page.elements.pinEdit.val();
+
+        const product = {
+            productName,
+            branchId,
+            price,
+            warrantyPeriod,
+            ram,
+            size,
+            color,
+            camera,
+            operatingSystem,
+            pin
+        }
+        page.elements.btnEdit.prop("disabled", true);
+        page.elements.loading.removeClass('hide')
+            $.ajax(
+                {
+                    method: 'PATCH',
+                    url: page.url.getProduct + productId,
+                    data: JSON.stringify(product)
+                }
+            )
+                .done((data) => {
+                    const str = page.commands.renderProduct(data)
+                    const updateRow = $('#tr_' + productId)
+                    updateRow.replaceWith(str)
+                    page.elements.modalEdit.modal('hide');
+                    AppUtils.showSuccess("Edit Successfully")
+                    page.commands.unhandleClickRow();
+                    page.commands.handleClickRow();
+                })
+                .fail((err) => {
+                    const responseJSON = err.responseJSON
+                    AppUtils.showError("Edit Unsuccessfully")
+
+                    if (responseJSON) {
+                        let str = '<ul>'
+                        $.each(responseJSON, (k, v) => {
+                            if (k.includes('.')) {
+                                str += `<li><label for="${k.split('.')[1] + 'Edit'}">${v}</label></li>`
+                            } else {
+                                str += `<li><label for="${k + 'Edit'}">${v}</label></li>`
+                            }
+                        })
+                        str += '</ul>'
+                        $('#modalEdit .area-error').append(str).removeClass('hide').css('display', '')
+                    }
+                })
+                .always(() => {
+                    page.elements.btnEdit.prop("disabled", false);
+                    page.elements.loading.addClass('hide')
+                });
+    }
+    page.commands.banProduct = () => {
+        const productName = page.elements.productNameBan.val();
+        const product = {
+            productName
+        }
+        page.elements.btnEdit.prop("disabled", true);
+        page.elements.loading.removeClass('hide')
+            $.ajax(
+                {
+                    method: 'PATCH',
+                    url: page.url.banProduct + productId,
+                    data: JSON.stringify(product)
+                }
+            )
+                .done(() => {
+                    const updateRow = $('#tr_' + productId)
+                    updateRow.remove()
+                    page.elements.modalBan.modal('hide');
+                    AppUtils.showSuccess("Ban Product Successfully")
+                })
+                .fail((err) => {
+                    const responseJSON = err.responseJSON
+                    AppUtils.showError("Ban Unsuccessfully")
+
+                    if (responseJSON) {
+                        let str = '<ul>'
+                        $.each(responseJSON, (k, v) => {
+                            if (k.includes('.')) {
+                                str += `<li><label for="${k.split('.')[1] + 'Ban'}">${v}</label></li>`
+                            } else {
+                                str += `<li><label for="${k + 'Ban'}">${v}</label></li>`
+                            }
+                        })
+                        str += '</ul>'
+                        $('#modalBan .area-error').append(str).removeClass('hide').css('display', '')
+                    }
+                })
+                .always(() => {
+                    page.elements.btnEdit.prop("disabled", false);
+                    page.elements.loading.addClass('hide')
+                });
+    }
 
     page.commands.renderBranch = (obj) => {
         return `<option value="${obj.id}">${obj.branchName}</option>`
@@ -435,6 +568,13 @@
     page.elements.btnCreate.on('click', async () => {
         page.elements.frmCreate.trigger('submit')
     })
+    page.elements.btnEdit.on('click', async () => {
+        page.elements.frmEdit.trigger('submit')
+    })
+    page.elements.btnBan.on('click', async () => {
+        page.commands.banProduct();
+    })
+
 
     $.ajaxSetup({
         headers: {
