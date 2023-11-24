@@ -18,8 +18,8 @@
     <th:block th:replace="layout/layout_home/feature" />
 
 
-    <th:block th:replace="layout/layout_home/bestSale" />
-
+<!--    <th:block th:replace="layout/layout_home/bestSale" />-->
+    <th:block th:replace="layout/layout_home/toast"></th:block>
 
     <th:block th:replace="layout/layout_home/productShow" />
 
@@ -43,11 +43,30 @@
         loadData: {},
         commands: {}
     }
+
+    $('#showCart').on('click', async () => {
+
+    })
     async function fetchALlProduct() {
         return await $.ajax({
             url: "http://localhost:8080/api/products"
         })
     }
+    async function fetchCartByUser(idUser) {
+        return await $.ajax({
+            url: "http://localhost:8080/api/cart/" + idUser
+        })
+    }
+    async function fetchALlCartDetail(idUser) {
+        return await $.ajax({
+            url: "http://localhost:8080/api/cart/" + idUser
+        })
+    }
+    // async function fetchALlBrand() {
+    //     return await $.ajax({
+    //         url: "http://localhost:8080/api/brand"
+    //     })
+    // }
 
     page.loadData.getAllProducts = async () => {
         const products = await fetchALlProduct();
@@ -56,6 +75,9 @@
             const str = page.commands.renderListProduct(item)
             $('#listProduct').prepend(str);
         });
+        const carts = await fetchALlCartDetail(1);
+        const qtyCartDetail = carts.length;
+            $('#qtyCartDetail').append(qtyCartDetail);
     }
 
     page.commands.renderListProduct = (obj) => {
@@ -73,7 +95,7 @@
                     </div>
                     <div class="card-footer d-flex justify-content-between bg-light border">
                         <a onclick=viewDetail(${obj.id}) class="btn btn-sm text-dark p-0" ><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                        <a class="btn btn-sm text-dark p-0" onclick=addToCart(${obj.id})><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                        <a onclick=addToCart(${obj.id}) class="btn btn-sm text-dark p-0" ><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                     </div>
                 </div>
             </div>
@@ -81,6 +103,31 @@
     }
     function viewDetail(idProduct){
         window.location.href = "http://localhost:8080/productDetail/" + idProduct;
+    }
+    async function addToCart(idProduct){
+        // const idUser = $('#idUser').val()
+         const cartDetailCreDTO = {
+            idProduct,
+            idUser :1
+        }
+        const qty = $('#qtyCartDetail').val()
+        console.log(qty);
+
+        await $.ajax(
+            {   headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                },
+                method: 'POST',
+                url: "http://localhost:8080/api/cart/addToCart",
+                data: JSON.stringify(cartDetailCreDTO)
+            }
+        ).done((data) => {
+            $('#qtyCartDetail').empty();
+             $('#qtyCartDetail').append(data.length);
+            AppUtils.showSuccess('Add to Cart successfully');
+        }).fail((err) => {
+            AppUtils.showError('This product is existing!!');
+        })
     }
     $(async () => {
        await page.loadData.getAllProducts()
@@ -91,13 +138,16 @@
 <!-- JavaScript Libraries -->
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
 <script src="/assets/asset/lib/easing/easing.min.js"></script>
 <script src="/assets/asset/lib/owlcarousel/owl.carousel.min.js"></script>
 
 <!-- Contact Javascript File -->
 <script src="/assets/asset/mail/jqBootstrapValidation.min.js"></script>
 <script src="/assets/asset/mail/contact.js"></script>
-
+<link rel="stylesheet" href="/assets/toast/jquery.toast.min.css">
+<script src="/assets/toast/jquery.toast.min.js"></script>
+<script src="/assets/utils/appUtils.js"></script>
 <!-- Template Javascript -->
 <script src="/assets/asset/js/main.js"></script>
 

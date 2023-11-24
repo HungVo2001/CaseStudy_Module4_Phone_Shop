@@ -22,7 +22,7 @@ public class ProductDetailController {
     @GetMapping("/{idProduct}")
     public String showDetail(@PathVariable Long idProduct, Model model){
         Optional<Product> product = productRepository.findById(idProduct);
-        model.addAttribute("product", product);
-        return "/user/productDetail";
+        model.addAttribute("product", product.get());
+        return "user/productDetail";
     }
 }
