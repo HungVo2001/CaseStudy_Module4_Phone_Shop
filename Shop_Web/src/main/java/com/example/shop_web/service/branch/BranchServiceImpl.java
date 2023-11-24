@@ -27,7 +27,7 @@ public class BranchServiceImpl implements  IBranchService {
 
     @Override
     public Branch save(Branch branch) {
-        return null;
+        return branchRepository.save(branch);
     }
 
 

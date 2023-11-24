@@ -1,3 +1,4 @@
+
 package com.example.shop_web.repository;
 
 import com.example.shop_web.domain.Branch;
