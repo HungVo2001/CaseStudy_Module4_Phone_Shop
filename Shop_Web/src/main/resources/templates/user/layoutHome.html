@@ -35,7 +35,7 @@
     <th:block th:replace="layout/layout_home/loading" />
     <th:block th:replace="layout/layout_home/toast" />
 <script>
-
+ const idUser = 2;
 
     const page = {
         url: {},
@@ -43,8 +43,8 @@
         loadData: {},
         commands: {}
     }
-    function showCart(idUser){
-        window.location.href = "http://localhost:8080/cart/" + idUser;
+    function showCart(){
+        window.location.href = "http://localhost:8080/cart/"
     }
 
     async function fetchALlProduct() {
@@ -66,7 +66,7 @@
             const str = page.commands.renderListProduct(item)
             $('#listProduct').prepend(str);
         });
-        const carts = await fetchALlCartDetail(1);
+        const carts = await fetchALlCartDetail(idUser);
         const qtyCartDetail = carts.length;
             $('#qtyCartDetail').append(qtyCartDetail);
     }
@@ -99,7 +99,7 @@
         // const idUser = $('#idUser').val()
          const cartDetailCreDTO = {
             idProduct,
-            idUser :1
+            idUser :idUser
         }
         const qty = $('#qtyCartDetail').val()
         console.log(qty);

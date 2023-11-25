@@ -37,10 +37,10 @@ public class CartRestController {
     }
     @PostMapping("/addToCart")
     public ResponseEntity<?> addToCard(@RequestBody CartDetailCreDTO cartDetailCreDTO){
-        Optional<User> user = userRepository.findById(cartDetailCreDTO.getIdUser());
-        Optional<Cart> cart = cartRepository.getCartByUser_Id(user.get().getId());
+//        Optional<User> user = userRepository.findById(cartDetailCreDTO.getIdUser());
+        Optional<Cart> cart = cartRepository.findByUserId(cartDetailCreDTO.getIdUser());
         Optional<Product> product = productRepository.findById(cartDetailCreDTO.getIdProduct());
-        if(cartDetailRepository.countAllByProductId(product.get().getId()) == 0 ){
+        if(cartDetailRepository.countAllByProductIdAndCart_Id(product.get().getId(), cart.get().getId()) == 0 ){
             int qty = 1;
             BigDecimal totalAmount  = product.get().getPrice().multiply(BigDecimal.valueOf(qty));
             CartDetail cartDetail = new CartDetail().setCart(cart.get()).setQuantity(1).setChecked(false).setProduct(product.get()).setTotalAmount(totalAmount);
@@ -50,4 +50,10 @@ public class CartRestController {
         }else throw new DataInputException("Product is existing");
 
     }
+    @DeleteMapping("/delete/{idCartDetail}")
+    public ResponseEntity<?> deleteCartDetail(@PathVariable Long idCartDetail){
+        cartDetailRepository.deleteById(idCartDetail);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
