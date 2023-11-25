@@ -87,7 +87,7 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Welcome ${user.userName}</span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="userNameCurrent"></span>
                             <img class="img-profile rounded-circle"
                                  src="/assets/undraw_profile_2.svg">
                         </a>
@@ -158,7 +158,7 @@
                             </tbody>
                         </table>
                         <div>
-                            <a class="btn btn-primary" href="/oder">Buy product</a>
+                            <a class="btn btn-primary" onclick="buyNow()">Buy product</a>
                             <a onclick="backHome()" class="btn btn-danger">Cancel</a>
                         </div>
                     </div>
@@ -208,6 +208,11 @@
 
 <script>
     const idUser = 2;
+    async function fetchUserById(idUser) {
+        return await $.ajax({
+            url: "http://localhost:8080/api/user/" + idUser
+        })
+    }
 
     const strFootTB = `<tr>
                                 <td hidden></td>
@@ -229,7 +234,9 @@
 
     page.loadData.showCart = async () => {
         const cartsList = await fetchALlCartByUser(idUser);
-
+        const userCurrent = await fetchUserById(idUser);
+        console.log(userCurrent.username);
+        document.getElementById("userNameCurrent").innerText = userCurrent.username;
         cartsList.forEach(item => {
             const str = page.commands.renderCart(item)
             $('#dataCart').prepend(str);
@@ -237,7 +244,10 @@
         updateTotalAmountChosen();
 
     }
-
+    function buyNow(){
+        saveCart();
+        window.location.href = "http://localhost:8080/oder";
+    }
     async function deleteCD(idCartDetail){
         await $.ajax(
             {   headers: {
@@ -275,13 +285,10 @@
             var quantityInput = row.querySelector('input[name="quantities"]');
             var id = parseInt(idCartDTElement.innerText);
             var quantity = parseInt(quantityInput.value);
-            // console.log(idCartDT)
-            // console.log(quantity)
             const cartDTUpdate = {
                 id,
                 quantity
             }
-            console.log(cartDTUpdate)
             updateCartDetail(cartDTUpdate)})
         console.log("SAVE CART SUCCESS!")
     }
@@ -310,43 +317,10 @@
     }
 
 
-    const message = document.getElementById('message');
-    if (message !== null && message.innerHTML) {
-        toastr.success(message.innerHTML);
-    }
-
-
-
-
-    // function setAction(action) {
-    //     var checkedIds = [];
-    //
-    //     for (var i = 0; i < checkboxes.length; i++) {
-    //         if (checkboxes[i].checked) {
-    //             checkedIds.push(checkboxes[i].id);
-    //         }
-    //     }
-    //     if (checkedIds.length === 0) {
-    //         window.location.href = "/cart?action=showCart";
-    //     } else {
-    //         document.getElementById('cartForm').action = action;
-    //         document.getElementById('cartForm').submit();
-    //     }
-    // }
-
     function setActionCancel(action) {
         document.getElementById('cartForm').action = action;
         document.getElementById('cartForm').submit();
     }
-
-    // const selectAllCheckbox = document.getElementById('selectAllCheckbox');
-    // const checkedboxes = document.getElementsByName('cartDetailID');
-    //
-    // selectAllCheckbox.addEventListener('change', function () {
-    //     checkedboxes.forEach(function (checkbox) {
-    //         checkbox.checked = selectAllCheckbox.checked;
-    //     });
-    // });
 
     function adjustValue() {
         var inputElement = document.getElementById("myInput");
@@ -375,15 +349,6 @@
         });
     });
 
-    // document.getElementById('selectAllCheckbox').addEventListener('click', function () {
-    //     var selectAllCheckbox = document.getElementById('selectAllCheckbox');
-    //     var isChecked = selectAllCheckbox.checked;
-    //     document.querySelectorAll('.myCheckBox').forEach(function (checkbox) {
-    //         checkbox.checked = isChecked;
-    //     });
-    //     updateTotalAmountChosen();
-    // });
-
     // Hàm cập nhật giá trị tổng
        function updateTotalAmountChosen() {
         var totalAmount = 0.0;
@@ -399,25 +364,9 @@
     document.addEventListener('DOMContentLoaded', function () {
         updateTotalAmountChosen();
     });
-    // document.querySelectorAll('.myCheckBox').forEach(function (checkbox) {
-    //     checkbox.addEventListener('change', function () {
-    //         var hiddenInput = this.parentNode.nextElementSibling.querySelector('input[name="cartChecked"]');
-    //         hiddenInput.value = this.checked ? '1' : '0';
-    //     });
-    // });
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     // Lặp qua tất cả các checkbox và input ẩn
-    //     document.querySelectorAll('.myCheckBox').forEach(function (checkbox) {
-    //         var hiddenInput = checkbox.parentNode.nextElementSibling.querySelector('input[name="cartChecked"]');
-    //
-    //         // Kiểm tra giá trị ban đầu của input ẩn
-    //         if (hiddenInput.value === '1') {
-    //             checkbox.checked = true; // Đặt trạng thái checked cho checkbox
-    //         }
-    //     });
-    // });
     $(async () => {
             await page.loadData.showCart();
+
         });
 
 </script>
