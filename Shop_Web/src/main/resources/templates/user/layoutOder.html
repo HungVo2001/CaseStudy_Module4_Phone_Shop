@@ -115,7 +115,7 @@
             <div class="container-fluid">
 
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Cart</h1>
+                    <h1 class="h3 mb-0 text-gray-800">Oder</h1>
                 </div>
 
                 <!-- Content Row -->
@@ -130,7 +130,7 @@
             </div>
             <!-- End of Main Content -->
             <div class="card-header py-3" style="display: flex; justify-content: space-between">
-                <h6 class="m-0 font-weight-bold text-primary">Cart</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Oder List</h6>
             </div>
             <form>
                 <div class="card-body">
@@ -145,7 +145,6 @@
                                 <th>Price (USD)</th>
                                 <th>Quantity</th>
                                 <th>Total value (USD)</th>
-                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody id="dataCart">
@@ -153,12 +152,12 @@
                                 <td hidden></td>
                                 <td hidden></td>
                                 <td colspan="4" style="font-weight: bold; text-align: center; color: red">Total Amount</td>
-                                <td id="total_amount" colspan="2"></td>
+                                <td id="total_amount"></td>
                             </tr>
                             </tbody>
                         </table>
                         <div>
-                            <a class="btn btn-primary" href="/oder">Buy product</a>
+                            <a class="btn btn-primary" onclick="oderCart()">Confirm Oder</a>
                             <a onclick="backHome()" class="btn btn-danger">Cancel</a>
                         </div>
                     </div>
@@ -213,7 +212,7 @@
                                 <td hidden></td>
                                 <td hidden></td>
                                 <td colspan="4" style="font-weight: bold; text-align: center; color: red">Total Amount</td>
-                                <td id="total_amount" colspan="2"></td>
+                                <td id="total_amount"></td>
                             </tr>`
     const page = {
         url: {},
@@ -236,25 +235,6 @@
         });
         updateTotalAmountChosen();
 
-    }
-
-    async function deleteCD(idCartDetail){
-        await $.ajax(
-            {   headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                },
-                method: 'DELETE',
-                url: "http://localhost:8080/api/cart/delete/" +idCartDetail,
-            }
-        ).done((data) => {
-            AppUtils.showSuccess('Delete successfully!!');
-            $('#dataCart').empty();
-            $('#dataCart').prepend(strFootTB);
-            page.loadData.showCart();
-            saveCart()
-        }).fail((err) => {
-            AppUtils.showError('Delete fail!!');
-        })
     }
     async function updateCartDetail(obj){
     await $.ajax(
@@ -286,7 +266,6 @@
         console.log("SAVE CART SUCCESS!")
     }
     function backHome(){
-        saveCart();
         window.location.href = "http://localhost:8080/home";
     }
     page.commands.renderCart = (cartDetail) => {
@@ -298,13 +277,8 @@
 <!--                                    <td><img src="/images${cartDetail.image}" style="width: 145px;height: 90px"></td>-->
                                     <td>ảnh</td>
                                     <td>${cartDetail.product.price}</td>
-                                    <td><input  class="qtyCD" style="max-width: 50px" type="number" value="${cartDetail.quantity}" min="1" max="${cartDetail.product.quantity}"
-                                               id="myInput" onchange="adjustValue()" onmouseout="adjustValue()" name="quantities"
-                                               oninput="updateTotalAmount(${cartDetail.product.price}, this.value,${cartDetail.id})"></td>
+                                    <td>${cartDetail.quantity}</td>
                                     <td  name="carttDTPrice" class="cartDTPrice" id="totalAmount_${cartDetail.id}">${cartDetail.totalAmount}</td>
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-danger" onclick="deleteCD(${cartDetail.id})" >Delete</a>
                                     </td>
                                 </tr>`
     }

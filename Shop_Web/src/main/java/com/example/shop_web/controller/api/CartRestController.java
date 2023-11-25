@@ -61,7 +61,7 @@ public class CartRestController {
             CartDetail cartDetailOld = cartDetailRepository.findById(cartDetailSaveDTO.getId()).get();
             cartDetailOld.setId(cartDetailSaveDTO.getId());
             cartDetailOld.setQuantity(cartDetailSaveDTO.getQuantity());
-            cartDetailOld.setTotalAmount(cartDetailOld.getTotalAmount().multiply(BigDecimal.valueOf(cartDetailSaveDTO.getQuantity())));
+            cartDetailOld.setTotalAmount(cartDetailOld.getProduct().getPrice().multiply(BigDecimal.valueOf(cartDetailSaveDTO.getQuantity())));
             cartDetailRepository.save(cartDetailOld);
         return new ResponseEntity<>(HttpStatus.OK);
     }
