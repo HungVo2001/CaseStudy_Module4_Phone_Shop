@@ -5,6 +5,7 @@ import com.example.shop_web.domain.CartDetail;
 import com.example.shop_web.domain.Product;
 import com.example.shop_web.domain.User;
 import com.example.shop_web.domain.dto.CartDetailCreDTO;
+import com.example.shop_web.domain.dto.CartDetailSaveDTO;
 import com.example.shop_web.exception.DataInputException;
 import com.example.shop_web.repository.CartDetailRepository;
 import com.example.shop_web.repository.CartRepository;
@@ -53,6 +54,15 @@ public class CartRestController {
     @DeleteMapping("/delete/{idCartDetail}")
     public ResponseEntity<?> deleteCartDetail(@PathVariable Long idCartDetail){
         cartDetailRepository.deleteById(idCartDetail);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PatchMapping("/updateCart")
+    public ResponseEntity<?> saveCart(@RequestBody CartDetailSaveDTO cartDetailSaveDTO){
+            CartDetail cartDetailOld = cartDetailRepository.findById(cartDetailSaveDTO.getId()).get();
+            cartDetailOld.setId(cartDetailSaveDTO.getId());
+            cartDetailOld.setQuantity(cartDetailSaveDTO.getQuantity());
+            cartDetailOld.setTotalAmount(cartDetailOld.getTotalAmount().multiply(BigDecimal.valueOf(cartDetailSaveDTO.getQuantity())));
+            cartDetailRepository.save(cartDetailOld);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

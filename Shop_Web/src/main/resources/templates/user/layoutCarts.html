@@ -19,7 +19,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/home">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" onclick="backHome()">
             <div class="sidebar-brand-icon">
                 <i class="fas fa-home"></i>
             </div>
@@ -159,7 +159,7 @@
                         </table>
                         <div>
                             <a class="btn btn-primary" onclick="orderCart()">Buy product</a>
-                            <a onclick="saveCart()" class="btn btn-danger">Cancel</a>
+                            <a onclick="backHome()" class="btn btn-danger">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -234,23 +234,10 @@
             const str = page.commands.renderCart(item)
             $('#dataCart').prepend(str);
         });
-
         updateTotalAmountChosen();
 
     }
-    function getAllCartInView(){
-        var cartDTList =  document.querySelectorAll('.cartDetailData');
-        cartDTList.forEach(function (item) {
-            var row = item.closest('tr');
-            var idCartDTElement = row.querySelector('td:nth-child(2)');
-            var quantityInput = row.querySelector('input[name="quantities"]');
-            var idCartDT = parseInt(idCartDTElement.textContent);
-            var quantity = parseInt(quantityInput.value);
-            console.log(idCartDT)
-            console.log(quantityInput)
-            console.log(quantity)
-    })
-    }
+
     async function deleteCD(idCartDetail){
         await $.ajax(
             {   headers: {
@@ -264,13 +251,12 @@
             $('#dataCart').empty();
             $('#dataCart').prepend(strFootTB);
             page.loadData.showCart();
-            updateTotalAmountChosen();
-
+            saveCart()
         }).fail((err) => {
             AppUtils.showError('Delete fail!!');
         })
     }
-    async function updateCartDetail(idCartDetail, obj){
+    async function updateCartDetail(obj){
     await $.ajax(
         {   headers: {
                 "Content-type": "application/json; charset=UTF-8"
@@ -278,27 +264,44 @@
             method: 'PATCH',
             url: "http://localhost:8080/api/cart/updateCart",
             data: JSON.stringify(obj)
-        }).fail((err) =>{
-        AppUtils.showError('Save Cart Unsuccessfully');
-    })
+        })
     }
 
     function saveCart(){
-
+        var cartDTList =  document.querySelectorAll('.cartDetailData');
+        cartDTList.forEach(function (item) {
+            var row = item.closest('tr');
+            var idCartDTElement = row.querySelector('td[name="cartDTId"]');
+            var quantityInput = row.querySelector('input[name="quantities"]');
+            var id = parseInt(idCartDTElement.innerText);
+            var quantity = parseInt(quantityInput.value);
+            // console.log(idCartDT)
+            // console.log(quantity)
+            const cartDTUpdate = {
+                id,
+                quantity
+            }
+            console.log(cartDTUpdate)
+            updateCartDetail(cartDTUpdate)})
+        console.log("SAVE CART SUCCESS!")
+    }
+    function backHome(){
+        saveCart();
+        window.location.href = "http://localhost:8080/home";
     }
     page.commands.renderCart = (cartDetail) => {
                         return `<tr class="cartDetailData">
                                     <td hidden><input type="hidden" name="cartChecked" value="${cartDetail.checked}">
                                     </td>
                                     <td>${cartDetail.product.productName}</td>
-                                    <td hidden class="cartDTId">${cartDetail.id}</td>
+                                    <td hidden name="cartDTId">${cartDetail.id}</td>
 <!--                                    <td><img src="/images${cartDetail.image}" style="width: 145px;height: 90px"></td>-->
                                     <td>ảnh</td>
                                     <td>${cartDetail.product.price}</td>
                                     <td><input  class="qtyCD" style="max-width: 50px" type="number" value="${cartDetail.quantity}" min="1" max="${cartDetail.product.quantity}"
                                                id="myInput" onchange="adjustValue()" onmouseout="adjustValue()" name="quantities"
                                                oninput="updateTotalAmount(${cartDetail.product.price}, this.value,${cartDetail.id})"></td>
-                                    <td  class="cartDTPrice" id="totalAmount_${cartDetail.id}">${cartDetail.totalAmount}</td>
+                                    <td  name="carttDTPrice" class="cartDTPrice" id="totalAmount_${cartDetail.id}">${cartDetail.totalAmount}</td>
                                     </td>
                                     <td>
                                         <a class="btn btn-danger" onclick="deleteCD(${cartDetail.id})" >Delete</a>
@@ -385,18 +388,10 @@
        function updateTotalAmountChosen() {
         var totalAmount = 0.0;
         var cartDTPrices = document.querySelectorAll('.cartDTPrice');
-        console.log(cartDTPrices)
         cartDTPrices.forEach(item => {
-            console.log(item.textContent)
                 const cartPriceDetail = parseInt(item.textContent);
                 totalAmount += cartPriceDetail;
         });
-        console.log(totalAmount);
-           getAllCartInView();
-        // Kiểm tra nếu totalAmount là NaN và không hợp lệ, thì gán giá trị mặc định
-        // if (isNaN(totalAmount) || !isFinite(totalAmount)) {
-        //     totalAmount = 0.0;
-        // }
 
         document.getElementById('total_amount').innerText = totalAmount;
     }
@@ -423,7 +418,6 @@
     // });
     $(async () => {
             await page.loadData.showCart();
-
         });
 
 </script>
