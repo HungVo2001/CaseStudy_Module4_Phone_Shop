@@ -5,6 +5,10 @@ class AppUtils {
     static BASE_BRANCHS_API = this.BASE_API_URL + '/branchs'
     static BASE_BANPRODUCT_API = this.BASE_API_URL + '/products/ban'
     static BASE_UNBANPRODUCT_API = this.BASE_API_URL + '/products/unBan'
+    static BASE_ORDERSCONFIRMING_API = this.BASE_API_URL + '/orders/confirming'
+    static BASE_ORDERSCONFIRMED_API = this.BASE_API_URL + '/orders/confirmed'
+    static BASE_ORDERSCANCELED_API = this.BASE_API_URL + '/orders/canceled'
+
     static showSuccess = (text) => {
         $.toast({
             heading: 'Success',

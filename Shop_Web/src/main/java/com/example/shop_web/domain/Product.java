@@ -1,5 +1,6 @@
 package com.example.shop_web.domain;
 
+import com.example.shop_web.domain.dto.ProductResOrderDTO;
 import com.example.shop_web.domain.enumaration.EPriceRange;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
@@ -51,6 +52,9 @@ public class Product {
 
     public Product(Long id) {
         this.id = id;
+    }
+    public ProductResOrderDTO toProDuctResOrderDTO(){
+        return  new ProductResOrderDTO().setName(productName);
     }
 
 }

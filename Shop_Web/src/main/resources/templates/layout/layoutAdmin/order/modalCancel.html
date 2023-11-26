@@ -1,0 +1,81 @@
+<th:block th:fragment="modalCancel">
+    <div class="modal fade" id="modalCancel" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Modal cancel</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="area-error hide">
+                    </div>
+                    <form id="frmCancel" method="post">
+                        <div class="row mb-3 mt-3">
+                            <h1> ORDER INFORMATION </h1>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-lg-3">
+                                <label for="shippingCodeCancel" class="form-label">Shipping code</label>
+                                <input type="text" class="form-control" id="shippingCodeCancel" name="shippingCodeCancel" disabled >
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="orderDateCancel" class="form-label">Order Date</label>
+                                <input type="text" class="form-control" id="orderDateCancel" name="orderDateCancel"  disabled >
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="usernameCancel" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="usernameCancel" name="usernameCancel"  disabled >
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="totalAmountCancel" class="form-label">Total amount</label>
+                                <input type="text" class="form-control" id="totalAmountCancel" name="totalAmountCancel" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-3 mt-3">
+                            <h1> RECEIVER INFORMATION </h1>
+                        </div>
+                        <div class="row mb-3 mt-3">
+                            <div class="col-lg-4">
+                                <label for="receiverNameCancel" class="form-label">Receiver Name</label>
+                                <input type="text" class="form-control" id="receiverNameCancel" name="receiverNameCancel">
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="emailCancel" class="form-label">Receiver's email</label>
+                                <input type="text" class="form-control" id="emailCancel" name="emailCancel">
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="phoneCancel" class="form-label">Receiver's phone</label>
+                                <input type="text" class="form-control" id="phoneCancel" name="phoneCancel">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-lg-3">
+                                <label for="provinceNameCancel" class="form-label">Province</label>
+                                <input type="text" class="form-control" id="provinceNameCancel" name="provinceNameCancel" >
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="districtNameCancel" class="form-label">District</label>
+                                <input type="text" class="form-control" id="districtNameCancel" name="districtNameCancel" >
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="wardNameCancel" class="form-label">Ward</label>
+                                <input type="text" class="form-control" id="wardNameCancel"  name="wardNameCancel">
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="addressCancel" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="addressCancel"  name="addressCancel">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-outline-danger" id="btnCancel">
+                        <i class="fas fa-ban"></i>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>

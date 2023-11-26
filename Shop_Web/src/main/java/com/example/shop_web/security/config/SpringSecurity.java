@@ -1,4 +1,4 @@
-
+//
 //package com.example.shop_web.security.config;
 //
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -57,4 +57,4 @@
 //                .passwordEncoder(passwordEncoder()); // loại mã hóa password
 //    }
 //}
-
+//

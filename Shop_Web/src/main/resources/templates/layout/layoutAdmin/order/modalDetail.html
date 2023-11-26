@@ -1,0 +1,77 @@
+<th:block th:fragment="modalDetail">
+    <div class="modal fade" id="modalDetail" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Modal Detail</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="area-error hide">
+                    </div>
+                    <form id="frmDetail" method="post">
+                        <div class="row mb-3 mt-3">
+                            <h1> ORDER INFORMATION </h1>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-lg-3">
+                                <label for="shippingCodeDetail" class="form-label">Shipping code</label>
+                                <input type="text" class="form-control" id="shippingCodeDetail" name="shippingCodeDetail" disabled >
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="orderDateDetail" class="form-label">Order Date</label>
+                                <input type="text" class="form-control" id="orderDateDetail" name="orderDateDetail"  disabled >
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="usernameDetail" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="usernameDetail" name="usernameDetail"  disabled >
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="totalAmountDetail" class="form-label">Total amount</label>
+                                <input type="text" class="form-control" id="totalAmountDetail" name="totalAmountDetail" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-3 mt-3">
+                            <h1> RECEIVER INFORMATION </h1>
+                        </div>
+                        <div class="row mb-3 mt-3">
+                            <div class="col-lg-4">
+                                <label for="receiverNameDetail" class="form-label">Receiver Name</label>
+                                <input type="text" class="form-control" id="receiverNameDetail" name="receiverNameDetail">
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="emailDetail" class="form-label">Receiver's email</label>
+                                <input type="text" class="form-control" id="emailDetail" name="emailDetail">
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="phoneDetail" class="form-label">Receiver's phone</label>
+                                <input type="text" class="form-control" id="phoneDetail" name="phoneDetail">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-lg-3">
+                                <label for="provinceNameDetail" class="form-label">Province</label>
+                                <input type="text" class="form-control" id="provinceNameDetail" name="provinceNameDetail" >
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="districtNameDetail" class="form-label">District</label>
+                                <input type="text" class="form-control" id="districtNameDetail" name="districtNameDetail" >
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="wardNameDetail" class="form-label">Ward</label>
+                                <input type="text" class="form-control" id="wardNameDetail"  name="wardNameDetail">
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="addressDetail" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="addressDetail"  name="addressDetail">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>

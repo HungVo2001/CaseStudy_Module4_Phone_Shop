@@ -1,6 +1,8 @@
 package com.example.shop_web.domain;
 
 import javax.persistence.*;
+
+import com.example.shop_web.domain.dto.LocationRegionDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,4 +54,11 @@ public class LocationRegion {
 //                .setAddress(address)
 //                ;
 //    }
+    public LocationRegionDTO locationRegionDTO(){
+        return  new LocationRegionDTO()
+                .setAddress(address)
+                .setProvinceName(provinceName)
+                .setWardName(wardName)
+                .setDistrictName(districtName);
+    }
 }

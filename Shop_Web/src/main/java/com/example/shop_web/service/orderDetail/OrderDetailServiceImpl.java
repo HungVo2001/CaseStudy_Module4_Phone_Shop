@@ -1,11 +1,8 @@
-package com.example.shop_web.service.order;
+package com.example.shop_web.service.orderDetail;
 
-import com.example.shop_web.domain.Order;
+import com.example.shop_web.domain.OrderDetail;
 import com.example.shop_web.domain.dto.OrderDetailResDTO;
-import com.example.shop_web.domain.dto.OrderResDTO;
-import com.example.shop_web.domain.enumaration.EStatus;
 import com.example.shop_web.repository.OrderDetailRepository;
-import com.example.shop_web.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,29 +11,27 @@ import java.util.List;
 import java.util.Optional;
 @Service
 @Transactional
-public class OrderServiceImpl implements IOrderService{
-    @Autowired
-    private OrderRepository orderRepository;
+public class OrderDetailServiceImpl  implements IOrderDetailService{
     @Autowired
     private OrderDetailRepository orderDetailRepository;
+
     @Override
-    public List<Order> findAll() {
+    public List<OrderDetail> findAll() {
         return null;
     }
 
     @Override
-    public Optional<Order> findById(Long id) {
+    public Optional<OrderDetail> findById(Long id) {
         return Optional.empty();
     }
 
     @Override
-    public Order save(Order order) {
+    public OrderDetail save(OrderDetail orderDetail) {
         return null;
     }
 
-
     @Override
-    public void update(Order order) {
+    public void update(OrderDetail orderDetail) {
 
     }
 
@@ -46,11 +41,7 @@ public class OrderServiceImpl implements IOrderService{
     }
 
     @Override
-    public List<OrderResDTO> findAllOrderByStatus(EStatus status) {
-        return orderRepository.findAllOrderResDTO(status);
+    public List<OrderDetailResDTO> findAllOrderDetailByOrderId(Long orderId) {
+        return orderDetailRepository.findAllOrderDetailByOrderId(orderId);
     }
-
-
-
-
 }

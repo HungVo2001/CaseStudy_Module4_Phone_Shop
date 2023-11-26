@@ -1,6 +1,7 @@
 package com.example.shop_web.domain;
 
 
+import com.example.shop_web.domain.dto.UserResDTO;
 import com.example.shop_web.domain.enumaration.EGender;
 import com.example.shop_web.domain.enumaration.ERole;
 
@@ -42,5 +43,9 @@ public class User extends BaseEntity {
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
                 '}';
+    }
+    public UserResDTO toUserResDTO(){
+        return  new UserResDTO()
+                .setUsername(username);
     }
 }
