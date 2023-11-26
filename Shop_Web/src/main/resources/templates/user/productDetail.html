@@ -32,11 +32,26 @@
 
 <!--&lt;!&ndash; Modal Transfer &ndash;&gt;-->
 <!--<th:block th:replace="customer/modalTransfer" />-->
+<script>
+    function adjustValueProduct() {
+        var inputElement = document.getElementById("qtyBuyNow");
+        // var value = parseFloat(inputElement.value);
+        var value = inputElement.value;
+        var min = 1
+        var max = parseFloat(document.getElementById("quantityProduct").innerText);
+        console.log(max);
+        console.log(min);
+        console.log(value);
+        if (isNaN(value) || value < min || value % 1 !== 0 || !isFinite(value)) {
+            inputElement.value = min;
+        } else if (value > max) {
+            inputElement.value = max;
+        }
+    }
+    function buyProductNow(){
 
-</body>
-
-
-<!-- JavaScript Libraries -->
+    }
+</script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 <script src="/assets/asset/lib/easing/easing.min.js"></script>
@@ -48,4 +63,9 @@
 
 <!-- Template Javascript -->
 <script src="/assets/asset/js/main.js"></script>
+</body>
+
+
+<!-- JavaScript Libraries -->
+
 </html>
