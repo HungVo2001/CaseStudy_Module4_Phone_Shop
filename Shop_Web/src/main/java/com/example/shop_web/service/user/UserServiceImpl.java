@@ -6,6 +6,8 @@ import com.example.shop_web.domain.UserPrinciple;
 import com.example.shop_web.repository.UserRepository;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -70,7 +72,18 @@ public class UserServiceImpl implements IUserService {
         }
         return UserPrinciple.build(userOptional.get());
     }
-
+    @Override
+    public Optional<User> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails userDetails) {
+                String username = userDetails.getUsername();
+                return userRepository.findByUsername(username);
+            }
+        }
+        return Optional.empty();
+    }
 
 }
 

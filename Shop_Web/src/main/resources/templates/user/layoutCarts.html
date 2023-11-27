@@ -37,7 +37,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="/oder" aria-expanded="true">
+            <a class="nav-link collapsed" href="/orders" aria-expanded="true">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Order Management</span>
             </a>
@@ -450,9 +450,104 @@
     document.addEventListener('DOMContentLoaded', function () {
         updateTotalAmountChosen();
     });
+    page.commands.getAllProvinces = async () => {
+        await $.ajax({
+            url: page.url.getAllProvinces
+        })
+            .done((data) => {
+                const provinces = data.results;
+
+                $.each(provinces, (index, item) => {
+                    const str = `<option value="${item.province_id}">${item.province_name}</option>`
+
+                    page.elements.provinceCre.append(str)
+                    page.elements.provinceUp.append(str)
+                })
+            })
+    }
+
+    page.commands.getAllDistricts = async (provinceId, elem) => {
+        await $.ajax({
+            url: page.url.getAllDistrictsByProvinceId + provinceId
+        })
+            .done((data) => {
+                $(elem).empty();
+
+                const districts = data.results;
+
+                $.each(districts, (index, item) => {
+                    const str = `<option value="${item.district_id}">${item.district_name}</option>`
+
+                    $(elem).append(str)
+                })
+            })
+    }
+
+    page.commands.getAllWards = (districtId, elem) => {
+        $.ajax({
+            url: page.url.getAllWardsByDistrictId + districtId
+        })
+            .done((data) => {
+                $(elem).empty();
+
+                const wards = data.results;
+
+                $.each(wards, (index, item) => {
+                    const str = `<option value="${item.ward_id}">${item.ward_name}</option>`
+
+                    $(elem).append(str)
+                })
+            })
+    }
+
+    page.elements.provinceCre.on('change', async function () {
+        const provinceId = $(this).val()
+
+        await page.commands.getAllDistricts(provinceId, page.elements.districtCre);
+
+        const districtId = page.elements.districtCre.find('option:selected').val()
+
+        page.commands.getAllWards(districtId, page.elements.wardCre)
+
+    })
+
+    page.elements.provinceUp.on('change', async function () {
+        const provinceId = $(this).val()
+
+        await page.commands.getAllDistricts(provinceId, page.elements.districtUp);
+
+        const districtId = page.elements.districtUp.find('option:selected').val()
+
+        page.commands.getAllWards(districtId, page.elements.wardUp)
+    })
+
+    page.elements.districtCre.on('change',  function () {
+        const districtId = $(this).val()
+
+        page.commands.getAllWards(districtId, page.elements.wardCre)
+    })
+
+    page.elements.districtUp.on('change',  function () {
+        const districtId = $(this).val()
+
+        page.commands.getAllWards(districtId, page.elements.wardUp)
+    })
+    $.ajaxSetup({
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    })
     $(async () => {
             await page.loadData.showCart();
+        await page.commands.getAllProvinces();
 
+        const provinceId = page.elements.provinceCre.find('option:selected').val()
+
+        await page.commands.getAllDistricts(provinceId, page.elements.districtCre);
+
+        const districtId = page.elements.districtCre.find('option:selected').val()
+
+        page.commands.getAllWards(districtId, page.elements.wardCre)
         });
 
 </script>

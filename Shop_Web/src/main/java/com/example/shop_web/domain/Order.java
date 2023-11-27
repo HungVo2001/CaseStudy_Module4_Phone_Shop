@@ -36,6 +36,8 @@ public class Order {
     private String shippingCode;
 
     private String receiverName;
+
+
     private String email;
     private String phone;
     @OneToOne
