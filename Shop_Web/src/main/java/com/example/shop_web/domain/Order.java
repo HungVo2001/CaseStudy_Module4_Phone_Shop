@@ -20,7 +20,11 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name="status")
     private EStatus status;
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private  User user;
@@ -37,6 +41,5 @@ public class Order {
     @OneToOne
     @JoinColumn(name = "location_region_id", referencedColumnName = "id", nullable = false)
     private LocationRegion locationRegion;
-
 
 }

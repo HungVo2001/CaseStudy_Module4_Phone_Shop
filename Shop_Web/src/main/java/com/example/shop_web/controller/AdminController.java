@@ -16,6 +16,11 @@ public class AdminController {
         return "admin/adminProductAndPImport";
     }
 
+    @GetMapping("/product-imports")
+    public String showProductImport() {
+        return "admin/adminProductImport";
+    }
+
     @GetMapping("/branchs")
     public String showBranch() {
         return "admin/adminBranch";

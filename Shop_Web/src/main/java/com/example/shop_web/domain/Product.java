@@ -1,5 +1,7 @@
 package com.example.shop_web.domain;
 
+import com.example.shop_web.domain.dto.ProductResOrderDTO;
+import com.example.shop_web.domain.dto.ProductResponseDTO;
 import com.example.shop_web.domain.enumaration.EPriceRange;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,9 +30,14 @@ public class Product {
     @JoinColumn(name = "branch_id", referencedColumnName = "id", nullable = false)
     private Branch branch;
 
+
     @OneToOne
     @JoinColumn(name = "image_id", referencedColumnName = "id", nullable = false)
     private Image image;
+
+//
+//    @OneToMany(mappedBy = "product")
+//    private List<Image> images;
 
     private BigDecimal price;
     private int quantity;
@@ -51,6 +58,15 @@ public class Product {
 
     public Product(Long id) {
         this.id = id;
+    }
+    public ProductResOrderDTO toProDuctResOrderDTO(){
+        return  new ProductResOrderDTO()
+                .setName(productName)
+                .setPrice(price);
+    }
+    public ProductResponseDTO toProductResponseDTO(){
+        return  new ProductResponseDTO()
+                .setProductName(productName);
     }
 
 }

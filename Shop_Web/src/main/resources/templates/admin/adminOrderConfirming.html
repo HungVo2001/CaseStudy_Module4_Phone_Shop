@@ -1,10 +1,371 @@
 <!DOCTYPE html>
 <html lang="en">
+<meta charset="UTF-8">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>List of products</title>
+    <th:block th:replace="layout/layoutAdmin/head"/>
 </head>
 <body>
+<div id="wrapper">
+    <th:block th:replace="layout/layoutAdmin/sidebar"/>
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <th:block th:replace="layout/layoutAdmin/topbar"/>
+            <!-- End of Topbar -->
 
+            <div class="container-fluid">
+
+                <th:block th:replace="layout/layout_home/loading"></th:block>
+                <th:block th:replace="layout/layout_home/toast"></th:block>
+
+                <div class="row">
+
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            <a href="/admin/orders/orderConfirming">ORDER CONFIRMING</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-users-cog fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            <a href="/admin/orders/orderConfirmed">ORDER CONFIRMED</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-tablet-alt fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            <a href="/admin/orders/orderCanceled">ORDER CANCELED</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-tablet-alt fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>Order code</th>
+                                    <th>Order date</th>
+                                    <th>Customer username</th>
+                                    <th>Total Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Begin Page Content -->
+            <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+        <th:block th:replace="layout/layoutAdmin/order/modalConfirm"/>
+        <th:block th:replace="layout/layoutAdmin/footer"/>
+        <!-- End of Footer -->
+        <th:block th:replace="layout/layoutAdmin/modalLogout"/>
+    </div>
+</div>
+<script>
+    const page = {
+        url: {
+            getAllOrderConfirming: AppUtils.BASE_ORDERSCONFIRMING_API,
+            getOrder: AppUtils.BASE_ORDERS_API + "/",
+            getOrderDetails :AppUtils.BASE_ORDERSDETAILS_API+"/",
+            confirmOrder: AppUtils.BASE_ORDERS_API+"/confirmOrder/",
+            cancelOrder:AppUtils.BASE_ORDERS_API+"/cancelOrder/"
+        },
+        elements: {},
+        loadData: {},
+        commands: {}
+    }
+    page.elements.modalConfirm = $('#modalConfirm');
+
+    page.elements.shippingCodeConfirm = $('#shippingCodeConfirm');
+    page.elements.orderDateConfirm = $('#orderDateConfirm');
+    page.elements.usernameConfirm = $('#usernameConfirm');
+    page.elements.totalAmountConfirm = $('#totalAmountConfirm');
+    page.elements.receiverNameConfirm = $('#receiverNameConfirm');
+    page.elements.emailConfirm = $('#emailConfirm');
+    page.elements.phoneConfirm = $('#phoneConfirm');
+    page.elements.provinceNameConfirm = $('#provinceNameConfirm');
+    page.elements.districtNameConfirm = $('#districtNameConfirm');
+    page.elements.wardNameConfirm = $('#wardNameConfirm');
+    page.elements.addressConfirm = $('#addressConfirm');
+
+
+    page.elements.orderDetailConfirm = $('#orderDetailConfirm');
+    page.elements.btnConfirm = $('#btnConfirm');
+    page.elements.btnCancel = $('#btnCancel');
+
+    page.elements.bodyProduct = $("#dataTable tbody");
+    page.elements.loading = $('#loading');
+    let orderId = 0;
+
+    page.commands.getAllOrderConfirming = async () => {
+        return await $.ajax({
+            url: page.url.getAllOrderConfirming
+        });
+    }
+    page.commands.getOrderDetails = async (orderId) => {
+        const response = await $.ajax({
+            url: page.url.getOrderDetails + orderId,
+            dataType: "json",
+        });
+        return response;
+    }
+    page.commands.getOrder = async (orderId) => {
+        const response = await $.ajax({
+            url: page.url.getOrder + orderId,
+            dataType: "json",
+        });
+        return response;
+    }
+
+    page.commands.handleInfoButton = () => {
+        const btnInfoElems = $(".info");
+        $.each(btnInfoElems, (index, item) => {
+            $(item).on("click", async () => {
+                console.log("123")
+                orderId = $(item).data("id");
+
+                const order = await page.commands.getOrder(orderId);
+
+                $('#shippingCodeConfirm').val(order.shippingCode);
+                $('#orderDateConfirm').val(order.orderDate);
+                $('#usernameConfirm').val(order.user.username);
+                $('#totalAmountConfirm').val(order.totalAmount);
+                $('#receiverNameConfirm').val(order.receiverName);
+                $('#emailConfirm').val(order.email);
+                $('#phoneConfirm').val(order.phone);
+                $('#provinceNameConfirm').val(order.locationRegion.provinceName);
+                $('#districtNameConfirm').val(order.locationRegion.districtName);
+                $('#wardNameConfirm').val(order.locationRegion.wardName);
+                $('#addressConfirm').val(order.locationRegion.address);
+
+                const orderDetails = await page.commands.getOrderDetails(orderId)
+                orderDetails.forEach(item => {
+                    const str = page.commands.renderOrderDetail(item);
+                    page.elements.orderDetailConfirm.append(str)})
+
+                $("#modalConfirm").modal("show");
+            })
+        })
+    }
+
+
+    page.commands.handleClickRow = () => {
+        page.commands.handleInfoButton();
+    }
+
+    page.loadData.renderOrder = async () => {
+        const orders = await page.commands.getAllOrderConfirming();
+        orders.forEach(item => {
+            const str = page.commands.renderOrder(item);
+            console.log(str)
+            page.elements.bodyProduct.prepend(str)
+        })
+        page.commands.handleClickRow();
+    }
+
+
+
+    page.commands.renderOrder = (obj) => {
+        return `<tr id="tr_${obj.id}">
+                               <td>${obj.shippingCode}</td>
+                               <td>${obj.orderDate}</td>
+                               <td>${obj.user.username}</td>
+                               <td>${obj.totalAmount}</td>
+                               <td>
+                                   <button class="btn btn-outline-success info" data-id="${obj.id}">
+                                       <i class="fas fa-info"></i>
+                                   </button>
+                               </td>
+                           </tr>
+`
+    }
+
+    page.commands.renderOrderDetail = (obj) => {
+        return `<div class="row mb-3">
+                            <div class="col-lg-3">
+                                <label  class="form-label">Product</label>
+                                <input type="text" class="form-control" value="${obj.product.name}"  disabled>
+                            </div>
+                            <div class="col-lg-3">
+                                <label  class="form-label">Quantity</label>
+                                <input type="text" class="form-control"  value="${obj.quantity}" disabled>
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label">Price</label>
+                                <input type="text" class="form-control"  value="${obj.product.price}" disabled>
+                            </div>
+                            <div class="col-lg-3">
+                                <label  class="form-label">Total</label>
+                                <input type="text" class="form-control"  value="${obj.totalAmount}" disabled>
+                            </div>
+                        </div
+`
+    }
+
+    $('#modalConfirm').on('hidden.bs.modal', async () => {
+        $("#modalConfirm .area-error").empty().addClass("hide")
+        page.elements.orderDetailConfirm.html("")
+    })
+
+
+    page.commands.confirmOrder = () => {
+        const order = {
+            id :orderId,
+        }
+        page.elements.btnCancel.prop("disabled", true);
+        page.elements.btnConfirm.prop("disabled", true);
+        page.elements.loading.removeClass('hide')
+        setTimeout(() => {
+            $.ajax(
+                {
+                    method: 'PATCH',
+                    url: page.url.confirmOrder+orderId,
+                    data: JSON.stringify(order)
+                }
+            )
+                .done((data) => {
+                    const updateRow = $('#tr_' + orderId)
+                    updateRow.remove()
+                    page.elements.modalConfirm.modal('hide');
+                    AppUtils.showSuccess("Order Confirmed Successfully")
+                })
+                .fail((err) => {
+                    const responseJSON = err.responseJSON
+                    AppUtils.showError("Order Confirmed Unsuccessfully")
+
+                    if (responseJSON) {
+                        let str = '<ul>'
+                        $.each(responseJSON, (k, v) => {
+                            if (k.includes('.')) {
+                                str += `<li><label for="${k.split('.')[1] + 'Confirm'}">${v}</label></li>`
+                            } else {
+                                str += `<li><label for="${k + 'Confirm'}">${v}</label></li>`
+                            }
+                        })
+                        str += '</ul>'
+                        $('#modalConfirm .area-error').append(str).removeClass('hide').css('display', '')
+                    }
+                })
+                .always(() => {
+                    page.elements.btnConfirm.prop("disabled", false);
+                    page.elements.btnCancel.prop("disabled", false);
+                    page.elements.loading.addClass('hide')
+                });
+        }, 1000);
+    }
+
+    page.commands.cancelOrder = () => {
+        const order = {
+            id :orderId,
+        }
+        page.elements.btnCancel.prop("disabled", true);
+        page.elements.btnConfirm.prop("disabled", true);
+        page.elements.loading.removeClass('hide')
+        setTimeout(() => {
+            $.ajax(
+                {
+                    method: 'PATCH',
+                    url: page.url.cancelOrder + orderId,
+                    data: JSON.stringify(order)
+                }
+            )
+                .done((data) => {
+                    const updateRow = $('#tr_' + orderId)
+                    updateRow.remove()
+                    page.elements.modalConfirm.modal('hide');
+                    AppUtils.showSuccess("Order Canceled Successfully")
+                })
+                .fail((err) => {
+                    const responseJSON = err.responseJSON
+                    AppUtils.showError("Order Canceled Unsuccessfully")
+
+                    if (responseJSON) {
+                        let str = '<ul>'
+                        $.each(responseJSON, (k, v) => {
+                            if (k.includes('.')) {
+                                str += `<li><label for="${k.split('.')[1] + 'Confirm'}">${v}</label></li>`
+                            } else {
+                                str += `<li><label for="${k + 'Confirm'}">${v}</label></li>`
+                            }
+                        })
+                        str += '</ul>'
+                        $('#modalConfirm .area-error').append(str).removeClass('hide').css('display', '')
+                    }
+                })
+                .always(() => {
+                    page.elements.btnConfirm.prop("disabled", false);
+                    page.elements.btnCancel.prop("disabled", false);
+                    page.elements.loading.addClass('hide')
+                });
+        }, 1000);
+    }
+
+
+    page.elements.btnConfirm.on('click', async () => {
+        page.commands.confirmOrder()
+    })
+    page.elements.btnCancel.on('click', async () => {
+        page.commands.cancelOrder()
+    })
+
+
+    $.ajaxSetup({
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    })
+    $(async () => {
+        await page.loadData.renderOrder()
+    })
+
+
+</script>
+
+<th:block th:replace="layout/layoutAdmin/foot"/>
 </body>
 </html>
