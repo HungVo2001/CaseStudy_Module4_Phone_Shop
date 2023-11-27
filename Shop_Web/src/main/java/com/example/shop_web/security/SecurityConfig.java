@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.multipart.support.MultipartFilter;
 
 import java.util.Arrays;
 
@@ -58,6 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(10);
     }
 
+
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
@@ -76,11 +78,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/auth/register",
                         "/login",
                         "/logout",
-                        "/api/test",
-                        "/home"
+                        "/api/test"
                 ).permitAll()
-                .antMatchers("/histories/transfer").hasAnyAuthority("ADMIN")
-                .antMatchers("/shop").hasAnyAuthority("CUSTOMER")
+                .antMatchers("/admin/**","/user/**", "/products/**","/assets/**").hasAnyAuthority("ADMIN")
+                .antMatchers("/user/**").hasAnyAuthority("USER")
                 .antMatchers("/resources/**", "/assets/**").permitAll()
 
 //                .antMatchers(
@@ -109,7 +110,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ;
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class).exceptionHandling().accessDeniedPage("/403");
-
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.cors();
     }

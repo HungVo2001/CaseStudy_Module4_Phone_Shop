@@ -5,6 +5,7 @@ import com.example.shop_web.domain.CartDetail;
 import com.example.shop_web.domain.Product;
 import com.example.shop_web.domain.User;
 import com.example.shop_web.domain.dto.CartDetailCreDTO;
+import com.example.shop_web.domain.dto.CartDetailSaveDTO;
 import com.example.shop_web.exception.DataInputException;
 import com.example.shop_web.repository.CartDetailRepository;
 import com.example.shop_web.repository.CartRepository;
@@ -37,10 +38,10 @@ public class CartRestController {
     }
     @PostMapping("/addToCart")
     public ResponseEntity<?> addToCard(@RequestBody CartDetailCreDTO cartDetailCreDTO){
-        Optional<User> user = userRepository.findById(cartDetailCreDTO.getIdUser());
-        Optional<Cart> cart = cartRepository.getCartByUser_Id(user.get().getId());
+//        Optional<User> user = userRepository.findById(cartDetailCreDTO.getIdUser());
+        Optional<Cart> cart = cartRepository.findByUserId(cartDetailCreDTO.getIdUser());
         Optional<Product> product = productRepository.findById(cartDetailCreDTO.getIdProduct());
-        if(cartDetailRepository.countAllByProductId(product.get().getId()) == 0 ){
+        if(cartDetailRepository.countAllByProductIdAndCart_Id(product.get().getId(), cart.get().getId()) == 0 ){
             int qty = 1;
             BigDecimal totalAmount  = product.get().getPrice().multiply(BigDecimal.valueOf(qty));
             CartDetail cartDetail = new CartDetail().setCart(cart.get()).setQuantity(1).setChecked(false).setProduct(product.get()).setTotalAmount(totalAmount);
@@ -50,4 +51,19 @@ public class CartRestController {
         }else throw new DataInputException("Product is existing");
 
     }
+    @DeleteMapping("/delete/{idCartDetail}")
+    public ResponseEntity<?> deleteCartDetail(@PathVariable Long idCartDetail){
+        cartDetailRepository.deleteById(idCartDetail);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PatchMapping("/updateCart")
+    public ResponseEntity<?> saveCart(@RequestBody CartDetailSaveDTO cartDetailSaveDTO){
+            CartDetail cartDetailOld = cartDetailRepository.findById(cartDetailSaveDTO.getId()).get();
+            cartDetailOld.setId(cartDetailSaveDTO.getId());
+            cartDetailOld.setQuantity(cartDetailSaveDTO.getQuantity());
+            cartDetailOld.setTotalAmount(cartDetailOld.getProduct().getPrice().multiply(BigDecimal.valueOf(cartDetailSaveDTO.getQuantity())));
+            cartDetailRepository.save(cartDetailOld);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

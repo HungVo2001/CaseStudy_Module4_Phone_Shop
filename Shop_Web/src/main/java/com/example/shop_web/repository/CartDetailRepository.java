@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface CartDetailRepository extends JpaRepository<CartDetail,Long> {
     List<CartDetail> getAllByCart_Id(Long cart_id);
-    Integer countAllByProductId(Long productId);
+    Integer countAllByProductIdAndCart_Id(Long productId, Long cardId);
     @Query(value = "Select cd.* " +
             "from cart_details as cd  " +
             "join (Select c.id " +

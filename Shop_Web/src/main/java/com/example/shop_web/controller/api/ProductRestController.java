@@ -1,11 +1,14 @@
 package com.example.shop_web.controller.api;
 
 import com.example.shop_web.domain.Branch;
+import com.example.shop_web.domain.Image;
 import com.example.shop_web.domain.Product;
 import com.example.shop_web.domain.dto.ProductBanReqDTO;
 import com.example.shop_web.domain.dto.ProductCreReqDTO;
 import com.example.shop_web.domain.dto.ProductResDTO;
 import com.example.shop_web.service.branch.IBranchService;
+import com.example.shop_web.service.image.ImageService;
+import com.example.shop_web.service.image.ImageServiceImpl;
 import com.example.shop_web.service.product.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -23,6 +27,8 @@ public class ProductRestController {
     private IProductService productService;
     @Autowired
     private IBranchService branchService;
+    @Autowired
+    private ImageService imageService;
 
     @GetMapping
     public ResponseEntity<?> getAll() {
@@ -35,18 +41,27 @@ public class ProductRestController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<?> create(@Validated @RequestBody ProductCreReqDTO productCreReqDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> create(@Validated ProductCreReqDTO productCreReqDTO, BindingResult bindingResult) throws IOException {
         new ProductCreReqDTO().validate(productCreReqDTO, bindingResult);
-        Product product = productCreReqDTO.toProduct();
+
+        Image image = new Image();
+        imageService.save(image);
+
+        Product product = productCreReqDTO.toProduct(image);
         Branch branch = branchService.findByBranchId(productCreReqDTO.getBranchId());
         product.setBranch(branch);
         product.setQuantity(0);
         product.setDeleted(true);
         productService.save(product);
+
+        productService.uploadAndSaveImage(image, productCreReqDTO.getFile());
+
         ProductResDTO productResDTO = productCreReqDTO.toProductResDTO();
         productResDTO.setBranch(branch.toBranchReqDTO());
         productResDTO.setPrice(product.getPrice());
         productResDTO.setId(product.getId());
+        productResDTO.setImage(product.getImage());
+
         return new ResponseEntity<>(productResDTO, HttpStatus.CREATED);
 
     }
@@ -58,19 +73,28 @@ public class ProductRestController {
     }
 
     @PatchMapping("/{idProduct}")
-    public ResponseEntity<?> update(@Validated @RequestBody ProductCreReqDTO productCreReqDTO, @PathVariable Long idProduct, BindingResult bindingResult) {
+    public ResponseEntity<?> update(@Validated ProductCreReqDTO productCreReqDTO, @PathVariable Long idProduct, BindingResult bindingResult) throws IOException {
         new ProductCreReqDTO().validate(productCreReqDTO, bindingResult);
-        Product product = productCreReqDTO.toProduct();
+
+        Image image = new Image();
+        imageService.save(image);
+
+        Product product = productCreReqDTO.toProduct(image);
         Product oldProduct = productService.findById(idProduct).get();
         Branch branch = branchService.findByBranchId(productCreReqDTO.getBranchId());
         product.setBranch(branch);
         product.setQuantity(oldProduct.getQuantity());
         product.setId(idProduct);
         productService.save(product);
+
+        productService.uploadAndSaveImage(image, productCreReqDTO.getFile());
+
         ProductResDTO productResDTO = productCreReqDTO.toProductResDTO();
         productResDTO.setBranch(branch.toBranchReqDTO());
         productResDTO.setPrice(product.getPrice());
         productResDTO.setId(product.getId());
+        productResDTO.setImage(product.getImage());
+
         return new ResponseEntity<>(productResDTO, HttpStatus.OK);
     }
 

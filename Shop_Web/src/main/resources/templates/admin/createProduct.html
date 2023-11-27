@@ -133,6 +133,7 @@
     page.elements.cameraCre = $('#cameraCre');
     page.elements.operatingCre = $('#operatingCre');
     page.elements.pinCre = $('#pinCre');
+    page.elements.imageCre = $('#imageCre');
     page.elements.btnCreate = $('#btnCreate');
 
     page.elements.modalEdit = $('#modalEdit');
@@ -147,6 +148,8 @@
     page.elements.cameraEdit = $('#cameraEdit');
     page.elements.operatingEdit = $('#operatingEdit');
     page.elements.pinEdit = $('#pinEdit');
+    page.elements.imageEdit = $('#imageEdit');
+    page.elements.imageShow = $('#imageShow');
     page.elements.btnEdit = $('#btnEdit');
 
     page.elements.modalBan = $('#modalBan');
@@ -196,7 +199,6 @@
 
         $.each(btnEditElems, (index, item) => {
             $(item).on("click", async () => {
-                console.log("123")
                 productId = $(item).data("id");
                 await page.loadData.renderBranch(page.elements.branchEdit)
                 const product = await page.commands.getProduct(productId);
@@ -211,6 +213,7 @@
                 $("#cameraEdit").val(product.camera)
                 $("#operatingEdit").val(product.operatingSystem)
                 $("#pinEdit").val(product.pin)
+                $("#imageShow").attr("src", product.image.fileUrl)
                 $("#modalEdit").modal("show");
             })
         })
@@ -219,7 +222,6 @@
         const btnBanElems = $(".ban");
         $.each(btnBanElems, (index, item) => {
             $(item).on("click", async () => {
-                console.log("123")
                 productId = $(item).data("id");
                 const product = await page.commands.getProduct(productId);
                 $("#productNameBan").val(product.productName)
@@ -278,7 +280,7 @@
                                <td>${obj.productName}</td>
                                <td>${obj.quantity}</td>
                                <td>${obj.branch.branchName}</td>
-                               <td>${obj.branch.branchName}</td>
+                               <td><img src="${obj.image.fileUrl}" width="100px" /></td>
                                <td>${obj.price}</td>
                                <td>
                                    <button class="btn btn-outline-success edit" data-id="${obj.id}">
@@ -399,19 +401,24 @@
         const camera = page.elements.cameraCre.val();
         const operatingSystem = page.elements.operatingCre.val();
         const pin = page.elements.pinCre.val();
+        const file = page.elements.imageCre[0].files[0];
 
-        const product = {
-            productName,
-            branchId,
-            price,
-            warrantyPeriod,
-            ram,
-            size,
-            color,
-            camera,
-            operatingSystem,
-            pin
-        }
+        const formData = new FormData();
+        formData.append('productName', productName);
+        formData.append('branchId', branchId);
+        formData.append('price', price);
+        formData.append('warrantyPeriod', warrantyPeriod);
+        formData.append('ram', ram);
+        formData.append('size', size);
+        formData.append('color', color);
+        formData.append('camera', camera);
+        formData.append('operatingSystem', operatingSystem);
+        formData.append('pin', pin);
+        formData.append('file', file);
+
+        const jwt = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3MDA5NzA5NDQsImV4cCI6MTcwMzU2Mjk0NH0.T-2sWplifzPbBF49IYlyUQa4WygYsgA9d0CuGbkIzXk';
+
+        // console.log(product);
         page.elements.btnCreate.prop("disabled", true);
         page.elements.loading.removeClass('hide')
         setTimeout(() => {
@@ -419,7 +426,13 @@
                 {
                     method: 'POST',
                     url: page.url.createProduct,
-                    data: JSON.stringify(product)
+                    contentType: false,
+                    processData:false,
+                    cache: false,
+                    headers: {
+                        'Authorization': 'Bearer ' + jwt
+                    },
+                    data: formData
                 }
             )
                 .done((data) => {
@@ -464,26 +477,36 @@
         const camera = page.elements.cameraEdit.val();
         const operatingSystem = page.elements.operatingEdit.val();
         const pin = page.elements.pinEdit.val();
+        const file = page.elements.imageEdit[0].files[0];
 
-        const product = {
-            productName,
-            branchId,
-            price,
-            warrantyPeriod,
-            ram,
-            size,
-            color,
-            camera,
-            operatingSystem,
-            pin
-        }
+        const formData = new FormData();
+        formData.append('productName', productName);
+        formData.append('branchId', branchId);
+        formData.append('price', price);
+        formData.append('warrantyPeriod', warrantyPeriod);
+        formData.append('ram', ram);
+        formData.append('size', size);
+        formData.append('color', color);
+        formData.append('camera', camera);
+        formData.append('operatingSystem', operatingSystem);
+        formData.append('pin', pin);
+        formData.append('file', file);
+
+        const jwt = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3MDA5NzA5NDQsImV4cCI6MTcwMzU2Mjk0NH0.T-2sWplifzPbBF49IYlyUQa4WygYsgA9d0CuGbkIzXk';
+
         page.elements.btnEdit.prop("disabled", true);
         page.elements.loading.removeClass('hide')
             $.ajax(
                 {
                     method: 'PATCH',
                     url: page.url.getProduct + productId,
-                    data: JSON.stringify(product)
+                    contentType: false,
+                    processData:false,
+                    cache: false,
+                    headers: {
+                        'Authorization': 'Bearer ' + jwt
+                    },
+                    data: formData
                 }
             )
                 .done((data) => {
@@ -575,10 +598,43 @@
         page.commands.banProduct();
     })
 
+    // upload ảnh
+    const selectImage = document.querySelector('.select-image');
+    const inputFile = document.querySelector('#imageCre');
+    const imgArea = document.querySelector('.img-area');
+
+    selectImage.addEventListener('click', function (e) {
+        e.preventDefault();
+        inputFile.click();
+    })
+
+    inputFile.addEventListener('change', function () {
+        const image = this.files[0];
+        const img = document.createElement('img');
+        if(image.size < 2000000) {
+            const reader = new FileReader();
+            reader.onload = ()=> {
+                const allImg = imgArea.querySelectorAll('img');
+                allImg.forEach(item=> item.remove());
+                const imgUrl = reader.result;
+
+                img.src = imgUrl;
+                img.style.width = '300px';
+                imgArea.appendChild(img);
+                imgArea.classList.add('active');
+                imgArea.dataset.img = image.name;
+            }
+            reader.readAsDataURL(image);
+        } else {
+            alert("Image size more than 2MB");
+        }
+    })
+
 
     $.ajaxSetup({
         headers: {
-            "Content-type": "application/json; charset=UTF-8"
+            // "Content-type": "application/json; charset=UTF-8"
+            // "Content-type": "multipart/form-data;boundary=----WebKitFormBoundaryjYoM5SGjAWFzTMdQ;charset=UTF-8"
         }
     })
     $(async () => {

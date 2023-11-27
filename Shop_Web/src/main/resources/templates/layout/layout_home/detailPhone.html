@@ -50,23 +50,24 @@
                 <div class="d-flex mb-3 col-7">
                     <p class="text-dark font-weight-medium mb-0 mr-3">Color:</p>
                     <p class="text-dark font-weight-medium mb-0 mr-3" th:text="${product.color}"></p>
+                    <p hidden th:text="${product.quantity}" id="quantityProduct"></p>
                 </div>
 
                 <div class="d-flex align-items-center mb-4 pt-2">
                     <div class="input-group quantity mr-3" style="width: 130px;">
                         <div class="input-group-btn">
-                            <button class="btn btn-primary btn-minus" >
+                            <button class="btn btn-primary btn-minus" onblur="adjustValueProduct()">
                                 <i class="fa fa-minus"></i>
                             </button>
                         </div>
-                        <input type="text" class="form-control bg-secondary text-center" value="1" id="qtyAddCart">
+                        <input type="text" onchange="adjustValueProduct()" onmouseleave="adjustValueProduct()" class="form-control bg-secondary text-center" value="1" id="qtyBuyNow">
                         <div class="input-group-btn">
-                            <button class="btn btn-primary btn-plus">
+                            <button class="btn btn-primary btn-plus" onblur="adjustValueProduct()">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>
                     </div>
-                    <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1" th:onclick="buyNow(${product.id})"></i> BUY NOW</button>
+                    <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1" onclick="buyProductNow()"></i> BUY NOW</button>
                 </div>
                 <div class="d-flex pt-2">
                     <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
