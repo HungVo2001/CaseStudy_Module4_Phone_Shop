@@ -158,8 +158,13 @@
                             </tbody>
                         </table>
                         <div>
-                            <a class="btn btn-primary" onclick="buyNow()">Buy product</a>
-                            <a onclick="backHome()" class="btn btn-danger">Cancel</a>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#modalCreate">
+                                <i class="far fa-plus-square"></i>
+                                Buy Product
+                            </button>
+                            <button type="button" class="btn btn-outline-danger" onclick="backHome()" >
+                                <i class="far fa-plus-square"></i>Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -184,7 +189,7 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
+    <th:block th:replace="/user/layoutOder/layoutCreate"/>
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -207,6 +212,60 @@
 </div>
 
 <script>
+
+    const page = {
+        url: {
+            getAllProvinces: 'https://vapi.vnappmob.com/api/province/',
+            getAllDistrictsByProvinceId: 'https://vapi.vnappmob.com/api/province/district/',
+            getAllWardsByDistrictId: 'https://vapi.vnappmob.com/api/province/ward/',
+        },
+        elements: {},
+        loadData: {},
+        commands: {}
+    }
+
+    page.elements.modalCreate = $('#modalCreate');
+    page.elements.frmCreate = $('#frmCreate');
+    page.elements.fullNameCre = $('#fullNameCre');
+    page.elements.emailCre = $('#emailCre');
+    page.elements.phoneCre = $('#phoneCre');
+    page.elements.provinceCre = $('#provinceCre');
+    page.elements.districtCre = $('#districtCre');
+    page.elements.wardCre = $('#wardCre');
+    page.elements.addressCre = $('#addressCre');
+    page.elements.btnCreate = $('#btnCreate');
+
+    page.elements.modalUpdate = $('#modalUpdate');
+    page.elements.frmUpdate = $('#frmUpdate');
+    page.elements.fullNameUp = $('#fullNameUp');
+    page.elements.emailUp = $('#emailUp');
+    page.elements.phoneUp = $('#phoneUp');
+    page.elements.provinceUp = $('#provinceUp');
+    page.elements.districtUp = $('#districtUp');
+    page.elements.wardUp = $('#wardUp');
+    page.elements.addressUp = $('#addressUp');
+    page.elements.btnUpdate = $('#btnUpdate');
+
+    page.elements.modalTransfer = $('#modalTransfer');
+    page.elements.frmTransfer = $('#frmTransfer');
+    page.elements.senderNameTrf = $('#senderNameTrf');
+    page.elements.senderPhoneTrf = $('#senderPhoneTrf');
+    page.elements.senderBalanceTrf = $('#senderBalanceTrf');
+    page.elements.recipientTrf = $('#recipientTrf');
+    page.elements.transferAmountTrf = $('#transferAmountTrf');
+    page.elements.transactionAmountTrf = $('#transactionAmountTrf');
+    page.elements.btnTransfer = $('#btnTransfer');
+
+    page.elements.bodyCustomer = $('#tbCustomer tbody')
+    page.elements.footer = $('footer')
+
+    page.elements.loading = $('#loading');
+
+    page.elements.toastLive = $('#liveToast')
+    page.elements.toastBody = $('#toast-body')
+    page.elements.btnCloseToast = $('#btnCloseToast')
+    page.elements.btnCancel = $('#cancel');
+
     const idUser = 2;
     async function fetchUserById(idUser) {
         return await $.ajax({
@@ -220,12 +279,6 @@
                                 <td colspan="4" style="font-weight: bold; text-align: center; color: red">Total Amount</td>
                                 <td id="total_amount" colspan="2"></td>
                             </tr>`
-    const page = {
-        url: {},
-        elements: {},
-        loadData: {},
-        commands: {}
-    }
     async function fetchALlCartByUser(idUser) {
         return await $.ajax({
             url: "http://localhost:8080/api/cart/" + idUser
@@ -244,10 +297,21 @@
         updateTotalAmountChosen();
 
     }
-    function buyNow(){
+    function backHome(){
         saveCart();
-        window.location.href = "http://localhost:8080/oder";
+        window.location.href = "http://localhost:8080/home";
     }
+    page.elements.btnCancel.on( () =>{
+        saveCart();
+        window.location.href = "http://localhost:8080/home";
+    })
+    page.elements.modalCreate.on('hidden.bs.modal', () => {
+        saveCart();
+        $('#modalCreate .area-error').empty().addClass('hide');
+        $('#frmCreate').trigger('reset')
+        $('#frmCreate input').removeClass('error')
+        $('#frmCreate label.error').remove()
+    })
     async function deleteCD(idCartDetail){
         await $.ajax(
             {   headers: {
@@ -291,10 +355,6 @@
             }
             updateCartDetail(cartDTUpdate)})
         console.log("SAVE CART SUCCESS!")
-    }
-    function backHome(){
-        saveCart();
-        window.location.href = "http://localhost:8080/home";
     }
     page.commands.renderCart = (cartDetail) => {
                         return `<tr class="cartDetailData">
