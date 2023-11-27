@@ -7,7 +7,7 @@
 </head>
 <body>
 <div id="wrapper">
-    <th:block th:replace="layout/layoutAdmin/sidebar"/>
+    <th:block th:replace="user/layoutOder/sideBarOrder"/>
     <div id="content-wrapper" class="d-flex flex-column">
         <!-- Main Content -->
         <div id="content">
@@ -29,7 +29,7 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            <a href="/admin/orders/orderConfirming">ORDER CONFIRMING</a>
+                                            <a href="/orders">ORDER CONFIRMING</a>
                                         </div>
                                     </div>
                                     <div class="col-auto">
@@ -46,7 +46,7 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                            <a href="/admin/orders/orderConfirmed">ORDER CONFIRMED</a>
+                                            <a href="/orders/confirmed">ORDER CONFIRMED</a>
                                         </div>
                                     </div>
                                     <div class="col-auto">
@@ -63,7 +63,7 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                            <a href="/admin/orders/orderCanceled">ORDER CANCELED</a>
+                                            <a href="/orders/canceled">ORDER CANCELED</a>
                                         </div>
                                     </div>
                                     <div class="col-auto">
@@ -84,7 +84,7 @@
                                 <tr>
                                     <th>Order code</th>
                                     <th>Order date</th>
-                                    <th>Customer username</th>
+                                    <th>Receiver name</th>
                                     <th>Total Amount</th>
                                     <th>Action</th>
                                 </tr>
@@ -109,7 +109,7 @@
 <script>
     const page = {
         url: {
-            getAllOrderConfirmed: AppUtils.BASE_ORDERSCONFIRMED_API,
+            getAllOrderConfirming: AppUtils.BASE_ORDERSCONFIRMING_API+"/user",
             getOrder: AppUtils.BASE_ORDERS_API + "/",
             getOrderDetails :AppUtils.BASE_ORDERSDETAILS_API+"/",
         },
@@ -140,9 +140,9 @@
     page.elements.loading = $('#loading');
     let orderId = 0;
 
-    page.commands.getAllOrderConfirmed = async () => {
+    page.commands.getAllOrderConfirming = async () => {
         return await $.ajax({
-            url: page.url.getAllOrderConfirmed
+            url: page.url.getAllOrderConfirming
         });
     }
     page.commands.getOrderDetails = async (orderId) => {
@@ -197,7 +197,7 @@
     }
 
     page.loadData.renderOrder = async () => {
-        const orders = await page.commands.getAllOrderConfirmed();
+        const orders = await page.commands.getAllOrderConfirming();
         orders.forEach(item => {
             const str = page.commands.renderOrder(item);
             console.log(str)
@@ -212,7 +212,7 @@
         return `<tr id="tr_${obj.id}">
                                <td>${obj.shippingCode}</td>
                                <td>${obj.orderDate}</td>
-                               <td>${obj.user.username}</td>
+                               <td>${obj.receiverName}</td>
                                <td>${obj.totalAmount}</td>
                                <td>
                                    <button class="btn btn-outline-success info" data-id="${obj.id}">
@@ -247,8 +247,10 @@
 
     $('#modalDetail').on('hidden.bs.modal', async () => {
         $("#modalDetail .area-error").empty().addClass("hide")
-        page.elements.orderDetailDetail.html("")
+        page.elements.orderDetail.html("")
     })
+
+
     $.ajaxSetup({
         headers: {
             "Content-type": "application/json; charset=UTF-8"
@@ -260,7 +262,6 @@
 
 
 </script>
-
 
 <th:block th:replace="layout/layoutAdmin/foot"/>
 </body>

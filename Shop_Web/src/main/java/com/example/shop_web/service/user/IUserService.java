@@ -5,10 +5,13 @@ import com.example.shop_web.domain.User;
 import com.example.shop_web.service.IGeneralService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.Optional;
+
 
 public interface IUserService extends IGeneralService<User, Long>, UserDetailsService {
 
     Boolean existsByUsername(String username);
 
     User getByUsername(String username);
+     Optional<User> getCurrentUser();
 }

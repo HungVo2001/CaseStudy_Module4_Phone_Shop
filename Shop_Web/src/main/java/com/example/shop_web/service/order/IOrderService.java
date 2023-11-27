@@ -15,5 +15,6 @@ public interface IOrderService extends IGeneralService<Order,Long> {
     public List<OrderResDTO> findAllOrderByStatus(EStatus status);
     OrderResDTO findOrderResDTOByOrderId( Long orderId );
 
+    List<OrderResDTO> findAllOrderResDTOByUserAndStatus( EStatus status,Long userId );
 
 }
