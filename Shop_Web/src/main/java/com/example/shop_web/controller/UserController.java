@@ -1,11 +1,14 @@
 package com.example.shop_web.controller;
 
 
+import com.example.shop_web.domain.User;
+import com.example.shop_web.repository.UserRepository;
 import lombok.AllArgsConstructor;
 //import org.springframework.security.core.Authentication;
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.authority.SimpleGrantedAuthority;
 //import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -19,7 +22,8 @@ import java.util.Collection;
 @RequestMapping("")
 @AllArgsConstructor
 public class UserController {
-
+@Autowired
+private UserRepository userRepository;
     @GetMapping("/home")
     public String showHomePage(Model model, Authentication authentication) {
         if(authentication == null){
@@ -34,6 +38,8 @@ public class UserController {
         } else {
             model.addAttribute("isUser",true);
         }
+        User userSession = userRepository.findByUsername(username).get();
+        model.addAttribute("userId", userSession.getId());
         return "user/layoutHome";
     }
 //    @GetMapping("/default")
