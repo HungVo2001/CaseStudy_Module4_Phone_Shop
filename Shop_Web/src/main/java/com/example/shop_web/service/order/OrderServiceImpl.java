@@ -26,7 +26,7 @@ public class OrderServiceImpl implements IOrderService{
 
     @Override
     public Optional<Order> findById(Long id) {
-        return Optional.empty();
+        return orderRepository.findById(id);
     }
 
     @Override
@@ -50,7 +50,10 @@ public class OrderServiceImpl implements IOrderService{
         return orderRepository.findAllOrderResDTO(status);
     }
 
-
+    @Override
+    public OrderResDTO findOrderResDTOByOrderId(Long orderId) {
+        return orderRepository.findOrderResDTOByOrderId(orderId);
+    }
 
 
 }

@@ -37,34 +37,39 @@
                         <div class="row mb-3 mt-3">
                             <div class="col-lg-4">
                                 <label for="receiverNameConfirm" class="form-label">Receiver Name</label>
-                                <input type="text" class="form-control" id="receiverNameConfirm" name="receiverNameConfirm">
+                                <input type="text" class="form-control" id="receiverNameConfirm" name="receiverNameConfirm" disabled>
                             </div>
                             <div class="col-lg-4">
                                 <label for="emailConfirm" class="form-label">Receiver's email</label>
-                                <input type="text" class="form-control" id="emailConfirm" name="emailConfirm">
+                                <input type="text" class="form-control" id="emailConfirm" name="emailConfirm" disabled>
                             </div>
                             <div class="col-lg-4">
                                 <label for="phoneConfirm" class="form-label">Receiver's phone</label>
-                                <input type="text" class="form-control" id="phoneConfirm" name="phoneConfirm">
+                                <input type="text" class="form-control" id="phoneConfirm" name="phoneConfirm" disabled>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-lg-3">
                                 <label for="provinceNameConfirm" class="form-label">Province</label>
-                                <input type="text" class="form-control" id="provinceNameConfirm" name="provinceNameConfirm" >
+                                <input type="text" class="form-control" id="provinceNameConfirm" name="provinceNameConfirm" disabled >
                             </div>
                             <div class="col-lg-3">
                                 <label for="districtNameConfirm" class="form-label">District</label>
-                                <input type="text" class="form-control" id="districtNameConfirm" name="districtNameConfirm" >
+                                <input type="text" class="form-control" id="districtNameConfirm" name="districtNameConfirm" disabled>
                             </div>
                             <div class="col-lg-3">
                                 <label for="wardNameConfirm" class="form-label">Ward</label>
-                                <input type="text" class="form-control" id="wardNameConfirm"  name="wardNameConfirm">
+                                <input type="text" class="form-control" id="wardNameConfirm"  name="wardNameConfirm"disabled>
                             </div>
                             <div class="col-lg-3">
                                 <label for="addressConfirm" class="form-label">Address</label>
-                                <input type="text" class="form-control" id="addressConfirm"  name="addressConfirm">
+                                <input type="text" class="form-control" id="addressConfirm"  name="addressConfirm" disabled>
                             </div>
+                        </div>
+                        <div class="row mb-3 mt-3">
+                            <h1> ORDER DETAILS </h1>
+                        </div>
+                        <div id="orderDetail">
                         </div>
                     </form>
                 </div>
@@ -73,6 +78,10 @@
                     <button type="submit" class="btn btn-outline-success" id="btnConfirm">
                         <i class="fas fa-check"></i>
                         CONFIRM
+                    </button>
+                    <button type="submit" class="btn btn-outline-danger" id="btnCancel">
+                        <i class="fas fa-ban"></i>
+                        CANCEL
                     </button>
                 </div>
             </div>

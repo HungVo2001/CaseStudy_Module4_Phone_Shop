@@ -8,6 +8,9 @@ class AppUtils {
     static BASE_ORDERSCONFIRMING_API = this.BASE_API_URL + '/orders/confirming'
     static BASE_ORDERSCONFIRMED_API = this.BASE_API_URL + '/orders/confirmed'
     static BASE_ORDERSCANCELED_API = this.BASE_API_URL + '/orders/canceled'
+    static BASE_ORDERS_API = this.BASE_API_URL + '/orders'
+    static BASE_ORDERSDETAILS_API = this.BASE_API_URL + '/orders/orderDetails'
+    static BASE_PRODUCTIMPORTS_API = this.BASE_API_URL + '/product-imports'
 
     static showSuccess = (text) => {
         $.toast({

@@ -13,5 +13,7 @@ import java.util.List;
 public interface IOrderService extends IGeneralService<Order,Long> {
 
     public List<OrderResDTO> findAllOrderByStatus(EStatus status);
+    OrderResDTO findOrderResDTOByOrderId( Long orderId );
+
 
 }

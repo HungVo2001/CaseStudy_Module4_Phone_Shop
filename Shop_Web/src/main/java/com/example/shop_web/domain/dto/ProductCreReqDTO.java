@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ProductCreReqDTO  implements Validator {
+public class ProductCreReqDTO implements Validator {
     private String productName;
     private Long branchId;
     private String price;
