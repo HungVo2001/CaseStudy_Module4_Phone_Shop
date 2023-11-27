@@ -14,7 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Image {
+public class Image extends BaseEntity {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -34,16 +34,6 @@ public class Image {
 
     @Column(name = "cloud_id")
     private String cloudId;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
-    @JsonIgnore
-    private Product product;
-
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     public Image(String id) {
         this.id = id;

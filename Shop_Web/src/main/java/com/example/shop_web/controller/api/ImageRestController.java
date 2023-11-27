@@ -1,7 +1,7 @@
 package com.example.shop_web.controller.api;
 
 import com.example.shop_web.domain.Image;
-import com.example.shop_web.service.image.ImageService;
+import com.example.shop_web.service.image.ImageServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,12 +15,12 @@ import java.io.IOException;
 @RequestMapping("api/image")
 @AllArgsConstructor
 public class ImageRestController {
-
-    private final ImageService imageService;
-
-    @PostMapping
-    public Image upload(@RequestParam("avatar") MultipartFile avatar) throws IOException {
-        return imageService.saveAvatar(avatar);
-    }
+//
+//    private final ImageServiceImpl imageServiceImpl;
+//
+//    @PostMapping
+//    public Image upload(@RequestParam("avatar") MultipartFile avatar) throws IOException {
+//        return imageServiceImpl.saveAvatar(avatar);
+//    }
 
 }

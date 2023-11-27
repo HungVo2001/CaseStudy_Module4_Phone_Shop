@@ -158,6 +158,10 @@
                             </tbody>
                         </table>
                         <div>
+<<<<<<< HEAD
+                            <a class="btn btn-primary" onclick="buyNow()">Buy product</a>
+                            <a onclick="backHome()" class="btn btn-danger">Cancel</a>
+=======
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#modalCreate">
                                 <i class="far fa-plus-square"></i>
@@ -165,6 +169,7 @@
                             </button>
                             <button type="button" class="btn btn-outline-danger" onclick="backHome()" >
                                 <i class="far fa-plus-square"></i>Cancel</button>
+>>>>>>> 9e3409aaa50ad36a005624fc1f48736370a15dc7
                         </div>
                     </div>
                 </div>
@@ -189,7 +194,11 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
+<<<<<<< HEAD
+
+=======
     <th:block th:replace="/user/layoutOder/layoutCreate"/>
+>>>>>>> 9e3409aaa50ad36a005624fc1f48736370a15dc7
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -212,6 +221,8 @@
 </div>
 
 <script>
+<<<<<<< HEAD
+=======
 
     const page = {
         url: {
@@ -266,6 +277,7 @@
     page.elements.btnCloseToast = $('#btnCloseToast')
     page.elements.btnCancel = $('#cancel');
 
+>>>>>>> 9e3409aaa50ad36a005624fc1f48736370a15dc7
     const idUser = 2;
     async function fetchUserById(idUser) {
         return await $.ajax({
@@ -279,6 +291,15 @@
                                 <td colspan="4" style="font-weight: bold; text-align: center; color: red">Total Amount</td>
                                 <td id="total_amount" colspan="2"></td>
                             </tr>`
+<<<<<<< HEAD
+    const page = {
+        url: {},
+        elements: {},
+        loadData: {},
+        commands: {}
+    }
+=======
+>>>>>>> 9e3409aaa50ad36a005624fc1f48736370a15dc7
     async function fetchALlCartByUser(idUser) {
         return await $.ajax({
             url: "http://localhost:8080/api/cart/" + idUser
@@ -297,6 +318,12 @@
         updateTotalAmountChosen();
 
     }
+<<<<<<< HEAD
+    function buyNow(){
+        saveCart();
+        window.location.href = "http://localhost:8080/oder";
+    }
+=======
     function backHome(){
         saveCart();
         window.location.href = "http://localhost:8080/home";
@@ -312,6 +339,7 @@
         $('#frmCreate input').removeClass('error')
         $('#frmCreate label.error').remove()
     })
+>>>>>>> 9e3409aaa50ad36a005624fc1f48736370a15dc7
     async function deleteCD(idCartDetail){
         await $.ajax(
             {   headers: {
@@ -356,6 +384,13 @@
             updateCartDetail(cartDTUpdate)})
         console.log("SAVE CART SUCCESS!")
     }
+<<<<<<< HEAD
+    function backHome(){
+        saveCart();
+        window.location.href = "http://localhost:8080/home";
+    }
+=======
+>>>>>>> 9e3409aaa50ad36a005624fc1f48736370a15dc7
     page.commands.renderCart = (cartDetail) => {
                         return `<tr class="cartDetailData">
                                     <td hidden><input type="hidden" name="cartChecked" value="${cartDetail.checked}">
