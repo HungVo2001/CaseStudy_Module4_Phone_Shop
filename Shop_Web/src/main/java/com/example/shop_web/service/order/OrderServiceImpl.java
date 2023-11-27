@@ -55,5 +55,10 @@ public class OrderServiceImpl implements IOrderService{
         return orderRepository.findOrderResDTOByOrderId(orderId);
     }
 
+    @Override
+    public List<OrderResDTO> findAllOrderResDTOByUserAndStatus(EStatus status, Long userId) {
+        return orderRepository.findAllOrderResDTOByUserAndStatus(status,userId);
+    }
+
 
 }
