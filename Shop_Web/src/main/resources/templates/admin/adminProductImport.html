@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<head>
+    <title>Product Import manager</title>
+    <th:block th:replace="layout/layoutAdmin/head"/>
+</head>
+<body>
+<div id="wrapper">
+    <th:block th:replace="layout/layoutAdmin/sidebar"/>
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <th:block th:replace="layout/layoutAdmin/topbar"/>
+            <!-- End of Topbar -->
+
+            <div class="container-fluid">
+
+                <th:block th:replace="layout/layout_home/loading"></th:block>
+                <th:block th:replace="layout/layout_home/toast"></th:block>
+
+                <div class="row">
+
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            <a href="/products">PRODUCT</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-users-cog fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Earnings (Monthly) Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-success shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            <a href="/admin/product-imports">PRODUCT IMPORT</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-tablet-alt fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Earnings (Monthly) Card Example -->
+                </div>
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3" style="display: flex; justify-content: space-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Product Import Management</h6>
+                        <div class="button-container">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#modalCreate">
+                                <i class="fas fa-plus"></i>
+                                Import Product
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Code</th>
+                                    <th>Date Import</th>
+                                    <th>Products</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Begin Page Content -->
+            <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+        <th:block th:replace="layout/layoutAdmin/product-import/modalCreate"/>
+        <th:block th:replace="layout/layoutAdmin/product-import/modalInfo"/>
+        <!-- Footer -->
+        <th:block th:replace="layout/layoutAdmin/footer"/>
+        <!-- End of Footer -->
+        <th:block th:replace="layout/layoutAdmin/modalLogout"/>
+    </div>
+</div>
+<script>
+    const page = {
+        url: {
+            getAllProductImports: AppUtils.BASE_PRODUCTIMPORTS_API,
+            getProductImport: AppUtils.BASE_PRODUCTIMPORTS_API + "/",
+            createProductImport: AppUtils.BASE_PRODUCTIMPORTS_API,
+            getAllProduct: AppUtils.BASE_PRODUCTS_API,
+        },
+        elements: {},
+        loadData: {},
+        commands: {}
+    }
+    page.elements.modalCreate = $('#modalCreate');
+    page.elements.frmCreate = $('#frmCreate');
+    page.elements.codeCre = $('#codeCre');
+    page.elements.importDateCre = $('#importDateCre');
+    page.elements.productCre = $(".productCre");
+    page.elements.productQuantityCre = $(".productQuantityCre");
+
+
+    page.elements.btnAddMore = $("#addMoreBtn")
+
+    page.elements.btnCreate = $('#btnCreate');
+
+    page.elements.productImportDetailCre = $("#productImportDetailCre")
+
+    page.elements.productImportDetailInfo = $("#productImportDetailInfo")
+
+
+    page.elements.bodyProduct = $("#dataTable tbody");
+    page.elements.loading = $('#loading');
+    let productId = 0;
+
+    page.commands.getAllProductImport = async () => {
+        return await $.ajax({
+            url: page.url.getAllProductImports
+        });
+    }
+    page.commands.getAllProduct = async () => {
+        return await $.ajax({
+            url: page.url.getAllProduct
+        });
+    }
+
+
+    page.commands.getProductImport = async (productImportId) => {
+        const response = await $.ajax({
+            url: page.url.getProductImport + productImportId,
+            dataType: "json",
+        });
+        return response;
+    }
+
+    page.commands.handleClickInfoButton = () => {
+        const btnInfoElems = $(".info");
+        $.each(btnInfoElems, (index, item) => {
+            $(item).on("click", async () => {
+                console.log("123")
+                productId = $(item).data("id");
+
+                const productImport = await page.commands.getProductImport(productId);
+                const productImportDetails = productImport.productImportDetails
+
+                $("#codeInfo").val(productImport.code)
+                $("#importDateInfo").val(productImport.importDate)
+                $("#totalAmountInfo").val(productImport.totalAmount)
+
+                productImportDetails.forEach(item => {
+                    const str = page.commands.renderProductImportDetail(item);
+                    page.elements.productImportDetailInfo.append(str)
+                })
+                $("#modalInfo").modal("show");
+            })
+        })
+    }
+
+    let rowProductImport = 1;
+    let rowCount = rowProductImport;
+
+
+    page.commands.handleClickAddMoreButton = () => {
+        page.elements.btnAddMore.on("click", async () => {
+            const products = await page.commands.getAllProduct();
+            if (rowCount === products.length) return
+            rowCount++;
+            const strRow = page.commands.renderRowProductImport(rowCount)
+            page.elements.productImportDetailCre.append(strRow)
+            await page.commands.handleFormSelectOption()
+            page.commands.handleDeleteRowButton()
+            page.commands.handleOnchange()
+        })
+    }
+    page.commands.handleDeleteRowButton = () => {
+        const btnDelete = $(".deleteRow");
+        $.each(btnDelete, (index, item) => {
+            $(item).off("click")
+            $(item).on("click", async () => {
+                const rowId = $(item).data("id")
+                if (rowCount === 1) {
+                    AppUtils.showError('Import at least 1 product');
+                    return;
+                }
+                rowCount--;
+                const deleteRow = $('#td_' + rowId)
+                deleteRow.remove();
+            })
+        })
+
+    }
+
+
+    page.commands.handleFormSelectOption = async () => {
+        $(".productCre").each(async (index, item) => {
+            await page.commands.renderProductSelectForm(item)
+        });
+    };
+
+
+    page.commands.renderProductSelectForm = async (elem) => {
+        $(elem).html("");
+        let str = ``;
+        const products = await page.commands.getAllProduct();
+        products.forEach(item => {
+            str += page.commands.renderProduct(item);
+            console.log("123")
+        })
+        $(elem).html(str);
+    }
+
+    page.commands.handleClickRow = () => {
+        page.commands.handleClickInfoButton();
+        page.commands.handleClickAddMoreButton();
+    }
+
+
+    page.commands.unhandleClickRow = () => {
+        const btnInfoElems = $(".info");
+        $.each(btnInfoElems, (index, item) => {
+            $(item).off("click")
+        })
+    }
+
+    page.loadData.renderProductImport = async () => {
+        const productImports = await page.commands.getAllProductImport();
+        productImports.forEach(item => {
+            const str = page.commands.renderProductImport(item);
+            console.log(str)
+            page.elements.bodyProduct.prepend(str)
+        })
+        console.log(123)
+        page.commands.handleClickRow();
+    }
+    page.commands.renderProductImport = (obj) => {
+        return `<tr id="tr_${obj.id}">
+                               <td>${obj.id}</td>
+                               <td>${obj.code}</td>
+                               <td>${obj.import_date}</td>
+                               <td>${obj.products}</td>
+                               <td>${obj.total_amount}</td>
+                               <td>
+                                   <button class="btn btn-outline-success info" data-id="${obj.id}">
+                                       <i class="fas fa-info"></i>
+                                   </button>
+                               </td>
+                           </tr>
+`
+    }
+
+    $('#modalCreate').on('hidden.bs.modal', async () => {
+        $("#modalCreate .area-error").empty().addClass("hide")
+        $('#frmCreate').trigger('reset')
+        $('#frmCreate input').removeClass('error')
+        $('#frmCreate label.error').remove()
+        $("#productImportDetailCre").html("")
+        rowCount = rowProductImport = 1
+        await page.loadData.renderModalCreate();
+        page.commands.handleDeleteRowButton();
+        page.commands.handleOnchange();
+    })
+    $('#modalInfo').on('hidden.bs.modal', async () => {
+        $("#modalEdit .area-error").empty().addClass("hide")
+        $('#frmEdit input').removeClass('error')
+        $('#frmEdit label.error').remove()
+        $("#productImportDetailInfo").html("")
+    })
+
+
+    page.elements.frmCreate.validate({
+        onkeyup: function (element) {
+            $(element).valid()
+        },
+        onclick: false,
+        onfocusout: false,
+        // rules: {
+        //     fullNameCre: {
+        //         required: true
+        //     },
+        //     addressCre: {
+        //         required: true
+        //     }
+        // },
+        // messages: {
+        //     fullNameCre: {
+        //         required: 'FullName is required'
+        //     },
+        //     addressCre: {
+        //         required: 'Address is required'
+        //     }
+        // },
+        errorLabelContainer: "#modalCreate .area-error",
+        errorPlacement: function (error, element) {
+            error.appendTo("#modalCreate .area-error");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#modalCreate .area-error").removeClass("hide").addClass("show");
+            } else {
+                $("#modalCreate .area-error").removeClass("show").addClass("hide").empty();
+                $("#frmCreate input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
+        submitHandler: () => {
+            page.commands.createProductImport()
+        }
+    })
+
+
+    page.commands.createProductImport = () => {
+        const code = page.elements.codeCre.val();
+        const importDate = page.elements.importDateCre.val();
+        const productImportDetails = [];
+
+        $('.productCre').each(function(index) {
+            const productId = $(this).val();
+            const quantity = parseInt($('.productQuantityCre').eq(index).val());
+            const productImportDetail = {
+                quantity: quantity,
+                productId: productId
+            };
+            productImportDetails.push(productImportDetail);
+        });
+
+        const productImport = {
+            code: code,
+            importDate: importDate,
+            productImportDetails: productImportDetails
+        };
+
+        page.elements.btnCreate.prop("disabled", true);
+        page.elements.loading.removeClass('hide')
+        setTimeout(() => {
+            $.ajax(
+                {
+                    method: 'POST',
+                    url: page.url.createProductImport,
+                    data: JSON.stringify(productImport)
+                }
+            )
+                .done((data) => {
+                    const str = page.commands.renderProductImport(data)
+                    page.elements.bodyProduct.prepend(str);
+                    page.elements.modalCreate.modal('hide');
+                    page.commands.unhandleClickRow  ();
+                    page.commands.handleClickInfoButton()
+                    page.commands.handleOnchange()
+                    AppUtils.showSuccess("Create Product Import Successfully")
+
+                })
+                .fail((err) => {
+                    const responseJSON = err.responseJSON
+                    AppUtils.showError("Create Product  Import Unsuccessfully")
+
+                    if (responseJSON) {
+                        let str = '<ul>'
+                        $.each(responseJSON, (k, v) => {
+                            if (k.includes('.')) {
+                                str += `<li><label for="${k.split('.')[1] + 'Cre'}">${v}</label></li>`
+                            } else {
+                                str += `<li><label for="${k + 'Cre'}">${v}</label></li>`
+                            }
+                        })
+                        str += '</ul>'
+                        $('#modalCreate .area-error').append(str).removeClass('hide').css('display', '')
+                    }
+                })
+                .always(() => {
+                    page.elements.btnCreate.prop("disabled", false);
+                    page.elements.loading.addClass('hide')
+                });
+        }, 1000);
+    }
+
+    page.loadData.renderModalCreate = async () => {
+        const str = page.commands.renderRowProductImport(rowCount);
+        page.elements.productImportDetailCre.append(str)
+        await page.commands.handleFormSelectOption()
+        page.commands.handleDeleteRowButton()
+
+    }
+    // let productsSelected = $('select[name="productIds"]').val();
+    // page.commands.handleOnchange = () => {
+    //     const elemSelect = $(".productCre");
+    //
+    //     $.each(elemSelect, (index, item) => {
+    //         $(item).off("change");
+    //         $(item).on("change", () => {
+    //             const selectedValue = $(item).val();
+    //             console.log($(item).val())
+    //             if (productsSelected && productsSelected.find(id => +id === +selectedValue)) {
+    //                 $(item).val("");
+    //                 AppUtils.showError('Product has been selected');
+    //             }
+    //             productsSelected = $('select[name="productIds"]').val();
+    //         });
+    //     });
+    // };
+
+    let productsSelected = [];
+
+    page.commands.handleOnchange = () => {
+        const elemSelect = $(".productCre");
+
+        elemSelect.off("change");
+        elemSelect.on("change", (event) => {
+            const selectedValue = $(event.target).val();
+
+            if (selectedValue === '' || productsSelected.includes(selectedValue)) {
+                let uniqueValue = generateUniqueValue(productsSelected);
+                while (uniqueValue === '' || uniqueValue === selectedValue) {
+                    uniqueValue = generateUniqueValue(productsSelected);
+                }
+                $(event.target).val(uniqueValue);
+
+                AppUtils.showError('Product has been selected');
+            }
+            productsSelected = elemSelect.map((index, item) => $(item).val()).get();
+        });
+    };
+
+    function generateUniqueValue(selectedValues) {
+        let newValue = 1;
+
+        while (selectedValues.includes(newValue.toString()) || newValue.toString() === '') {
+            newValue++;
+        }
+
+        return newValue.toString();
+    }
+    page.commands.renderRowProductImport = (number) => {
+        return `<div class="row mb-3" id ="td_${number}" >
+            <div class="col-lg-4">
+                <select class="form-select productCre" name=productIds" required>
+               </select>
+            </div>
+            <div class="col-lg-4">
+                <input type="number" class="form-control productQuantityCre" name="quantities" required>
+            </div>
+            <div class="col-lg-4 d-flex justify-content-end">
+                <button type="button" class="btn btn-danger deleteRow" data-id="${number}">Delete
+                 </button>
+            </div>
+                </div>`
+    }
+    page.commands.renderProduct = (obj) => {
+        return `<option value="${obj.id}">${obj.productName}</option>`
+    }
+
+    page.commands.renderProductImportDetail = (obj) => {
+        return ` <div class="row mb-3">
+                                <div class="col-lg-6">
+                                    <input type="text" class="form-control" value="${obj.product.productName}" disabled>
+                                </div>
+                                <div class="col-lg-6">
+                                    <input type="text" class="form-control"  value="${obj.quantity}" disabled>
+                                </div>
+                            </div>`
+    }
+
+
+    page.elements.btnCreate.on('click', async () => {
+        page.elements.frmCreate.trigger('submit')
+    })
+
+
+    $.ajaxSetup({
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    })
+    $(async () => {
+        await page.loadData.renderProductImport();
+        await page.loadData.renderModalCreate();
+        page.commands.handleOnchange();
+    })
+
+
+</script>
+<th:block th:replace="layout/layoutAdmin/foot"/>
+</body>
+</html>

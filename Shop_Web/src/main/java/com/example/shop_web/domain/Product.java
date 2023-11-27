@@ -1,6 +1,7 @@
 package com.example.shop_web.domain;
 
 import com.example.shop_web.domain.dto.ProductResOrderDTO;
+import com.example.shop_web.domain.dto.ProductResponseDTO;
 import com.example.shop_web.domain.enumaration.EPriceRange;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,9 +32,6 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<Image> images;
-
-
-
     private BigDecimal price;
     private int quantity;
     private String warrantyPeriod;
@@ -54,7 +52,13 @@ public class Product {
         this.id = id;
     }
     public ProductResOrderDTO toProDuctResOrderDTO(){
-        return  new ProductResOrderDTO().setName(productName);
+        return  new ProductResOrderDTO()
+                .setName(productName)
+                .setPrice(price);
+    }
+    public ProductResponseDTO toProductResponseDTO(){
+        return  new ProductResponseDTO()
+                .setProductName(productName);
     }
 
 }

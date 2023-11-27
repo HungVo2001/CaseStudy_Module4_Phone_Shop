@@ -1,8 +1,8 @@
 package com.example.shop_web.controller.api;
 
-import com.example.shop_web.domain.dto.OrderDetailResDTO;
-import com.example.shop_web.domain.dto.OrderResDTO;
-import com.example.shop_web.domain.dto.ProductResDTO;
+import com.example.shop_web.domain.Order;
+import com.example.shop_web.domain.Product;
+import com.example.shop_web.domain.dto.*;
 import com.example.shop_web.domain.enumaration.EStatus;
 import com.example.shop_web.service.branch.IBranchService;
 import com.example.shop_web.service.order.IOrderService;
@@ -10,9 +10,7 @@ import com.example.shop_web.service.orderDetail.IOrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -50,6 +48,31 @@ public class OrderRestController {
             ord.setOrderDetails(orderDetails);
         }
         return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+    @GetMapping("/{idOrder}")
+    public ResponseEntity<?> findById(@PathVariable Long idOrder) {
+        OrderResDTO order = orderService.findOrderResDTOByOrderId(idOrder);
+        return new ResponseEntity<>(order, HttpStatus.OK);
+    }
+    @GetMapping("/orderDetails/{idOrder}")
+    public ResponseEntity<?> findOrderDetailsById(@PathVariable Long idOrder) {
+        List<OrderDetailResDTO> orderdetails = orderDetailService.findAllOrderDetailByOrderId(idOrder);
+        return new ResponseEntity<>(orderdetails, HttpStatus.OK);
+    }
+
+    @PatchMapping("/confirmOrder/{idOrder}")
+    public ResponseEntity<?> confirm(@RequestBody OrderReqDTO orderReqDTO,@PathVariable Long idOrder) {
+        Order order = orderService.findById(idOrder).get();
+        order.setStatus(EStatus.CONFIRMED);
+        orderService.save(order);
+        return new ResponseEntity<>( orderReqDTO,HttpStatus.OK);
+    }
+    @PatchMapping("/cancelOrder/{idOrder}")
+    public ResponseEntity<?> cancel(@RequestBody OrderReqDTO orderReqDTO,@PathVariable Long idOrder) {
+        Order order = orderService.findById(idOrder).get();
+        order.setStatus(EStatus.CANCELED);
+        orderService.save(order);
+        return new ResponseEntity<>(orderReqDTO, HttpStatus.OK);
     }
 
 }

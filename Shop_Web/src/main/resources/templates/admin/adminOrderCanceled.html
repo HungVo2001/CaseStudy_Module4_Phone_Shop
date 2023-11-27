@@ -63,7 +63,7 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                            <a href="/orders/orderCanceled">ORDER CONFIRMED</a>
+                                            <a href="/admin/orders/orderCanceled">ORDER CANCELED</a>
                                         </div>
                                     </div>
                                     <div class="col-auto">
@@ -76,6 +76,25 @@
 
                 </div>
                 <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>Order code</th>
+                                    <th>Order date</th>
+                                    <th>Customer username</th>
+                                    <th>Total Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- Begin Page Content -->
             <!-- /.container-fluid -->
@@ -87,6 +106,163 @@
         <th:block th:replace="layout/layoutAdmin/modalLogout"/>
     </div>
 </div>
+<script>
+    const page = {
+        url: {
+            getAllOrderCanceled: AppUtils.BASE_ORDERSCANCELED_API,
+            getOrder: AppUtils.BASE_ORDERS_API + "/",
+            getOrderDetails :AppUtils.BASE_ORDERSDETAILS_API+"/",
+        },
+        elements: {},
+        loadData: {},
+        commands: {}
+    }
+    page.elements.modalDetail = $('#modalDetail');
+
+    page.elements.shippingCodeDetail = $('#shippingCodeDetail');
+    page.elements.orderDateDetail = $('#orderDateDetail');
+    page.elements.usernameDetail = $('#usernameDetail');
+    page.elements.totalAmountDetail = $('#totalAmountDetail');
+    page.elements.receiverNameDetail = $('#receiverNameDetail');
+    page.elements.emailDetail = $('#emailDetail');
+    page.elements.phoneDetail = $('#phoneDetail');
+    page.elements.provinceNameDetail = $('#provinceNameDetail');
+    page.elements.districtNameDetail = $('#districtNameDetail');
+    page.elements.wardNameDetail = $('#wardNameDetail');
+    page.elements.addressDetail = $('#addressDetail');
+
+
+    page.elements.orderDetail = $('#orderDetail');
+    page.elements.btnDetail = $('#btnDetail');
+    page.elements.btnCancel = $('#btnCancel');
+
+    page.elements.bodyProduct = $("#dataTable tbody");
+    page.elements.loading = $('#loading');
+    let orderId = 0;
+
+    page.commands.getAllOrderCanceled = async () => {
+        return await $.ajax({
+            url: page.url.getAllOrderCanceled
+        });
+    }
+    page.commands.getOrderDetails = async (orderId) => {
+        const response = await $.ajax({
+            url: page.url.getOrderDetails + orderId,
+            dataType: "json",
+        });
+        return response;
+    }
+    page.commands.getOrder = async (orderId) => {
+        const response = await $.ajax({
+            url: page.url.getOrder + orderId,
+            dataType: "json",
+        });
+        return response;
+    }
+
+    page.commands.handleInfoButton = () => {
+        const btnInfoElems = $(".info");
+        $.each(btnInfoElems, (index, item) => {
+            $(item).on("click", async () => {
+                console.log("123")
+                orderId = $(item).data("id");
+
+                const order = await page.commands.getOrder(orderId);
+
+                $('#shippingCodeDetail').val(order.shippingCode);
+                $('#orderDateDetail').val(order.orderDate);
+                $('#usernameDetail').val(order.user.username);
+                $('#totalAmountDetail').val(order.totalAmount);
+                $('#receiverNameDetail').val(order.receiverName);
+                $('#emailDetail').val(order.email);
+                $('#phoneDetail').val(order.phone);
+                $('#provinceNameDetail').val(order.locationRegion.provinceName);
+                $('#districtNameDetail').val(order.locationRegion.districtName);
+                $('#wardNameDetail').val(order.locationRegion.wardName);
+                $('#addressDetail').val(order.locationRegion.address);
+
+                const orderDetails = await page.commands.getOrderDetails(orderId)
+                orderDetails.forEach(item => {
+                    const str = page.commands.renderOrderDetail(item);
+                    page.elements.orderDetail.append(str)})
+
+                $("#modalDetail").modal("show");
+            })
+        })
+    }
+
+
+    page.commands.handleClickRow = () => {
+        page.commands.handleInfoButton();
+    }
+
+    page.loadData.renderOrder = async () => {
+        const orders = await page.commands.getAllOrderCanceled();
+        orders.forEach(item => {
+            const str = page.commands.renderOrder(item);
+            console.log(str)
+            page.elements.bodyProduct.prepend(str)
+        })
+        page.commands.handleClickRow();
+    }
+
+
+
+    page.commands.renderOrder = (obj) => {
+        return `<tr id="tr_${obj.id}">
+                               <td>${obj.shippingCode}</td>
+                               <td>${obj.orderDate}</td>
+                               <td>${obj.user.username}</td>
+                               <td>${obj.totalAmount}</td>
+                               <td>
+                                   <button class="btn btn-outline-success info" data-id="${obj.id}">
+                                       <i class="fas fa-info"></i>
+                                   </button>
+                               </td>
+                           </tr>
+`
+    }
+
+    page.commands.renderOrderDetail = (obj) => {
+        return `<div class="row mb-3">
+                            <div class="col-lg-3">
+                                <label  class="form-label">Product</label>
+                                <input type="text" class="form-control" value="${obj.product.name}"  disabled>
+                            </div>
+                            <div class="col-lg-3">
+                                <label  class="form-label">Quantity</label>
+                                <input type="text" class="form-control"  value="${obj.quantity}" disabled>
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="form-label">Price</label>
+                                <input type="text" class="form-control"  value="${obj.product.price}" disabled>
+                            </div>
+                            <div class="col-lg-3">
+                                <label  class="form-label">Total</label>
+                                <input type="text" class="form-control"  value="${obj.totalAmount}" disabled>
+                            </div>
+                        </div
+`
+    }
+
+    $('#modalDetail').on('hidden.bs.modal', async () => {
+        $("#modalDetail .area-error").empty().addClass("hide")
+        page.elements.orderDetail.html("")
+    })
+
+
+    $.ajaxSetup({
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    })
+    $(async () => {
+        await page.loadData.renderOrder()
+    })
+
+
+</script>
+
 <th:block th:replace="layout/layoutAdmin/foot"/>
 </body>
 </html>
