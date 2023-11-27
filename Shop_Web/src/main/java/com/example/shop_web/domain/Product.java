@@ -30,8 +30,15 @@ public class Product {
     @JoinColumn(name = "branch_id", referencedColumnName = "id", nullable = false)
     private Branch branch;
 
-    @OneToMany(mappedBy = "product")
-    private List<Image> images;
+
+    @OneToOne
+    @JoinColumn(name = "image_id", referencedColumnName = "id", nullable = false)
+    private Image image;
+
+//
+//    @OneToMany(mappedBy = "product")
+//    private List<Image> images;
+
     private BigDecimal price;
     private int quantity;
     private String warrantyPeriod;
@@ -47,6 +54,7 @@ public class Product {
 
     @Column(name = "deleted", columnDefinition = "TINYINT(1)")
     private Boolean deleted;
+
 
     public Product(Long id) {
         this.id = id;

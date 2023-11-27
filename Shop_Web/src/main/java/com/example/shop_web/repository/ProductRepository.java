@@ -32,7 +32,8 @@ public interface ProductRepository  extends JpaRepository<Product,Long> {
             "pro.camera ," +
             "pro.operatingSystem ," +
             "pro.pin ," +
-            "pro.price " +
+            "pro.price, " +
+            "pro.image " +
             ") " +
             "FROM Product AS pro WHERE pro.deleted = :deleted"
     )
@@ -50,7 +51,8 @@ public interface ProductRepository  extends JpaRepository<Product,Long> {
             "pro.camera ," +
             "pro.operatingSystem ," +
             "pro.pin ," +
-            "pro.price " +
+            "pro.price, " +
+            "pro.image " +
             ") " +
             "FROM Product AS pro WHERE pro.id = :productId"
     )

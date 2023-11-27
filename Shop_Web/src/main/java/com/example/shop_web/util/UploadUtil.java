@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Component
 public class UploadUtil {
-    public static final String IMAGE_UPLOAD_FOLDER = "car_rental";
+    public static final String IMAGE_UPLOAD_FOLDER = "shop_web";
     public Map buildImageUploadParams(Image image) {
         if (image == null || image.getId() == null)
             throw new DataInputException("Không thể upload hình ảnh của sản phẩm chưa được lưu");

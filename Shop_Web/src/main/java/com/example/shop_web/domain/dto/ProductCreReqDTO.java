@@ -1,5 +1,6 @@
 package com.example.shop_web.domain.dto;
 
+import com.example.shop_web.domain.Image;
 import com.example.shop_web.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,8 +8,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,9 +34,12 @@ public class ProductCreReqDTO implements Validator {
     private String operatingSystem;
     private String pin;
 
-    public Product toProduct (){
+    private MultipartFile file;
+
+    public Product toProduct(Image image) throws IOException {
         return  new Product()
                 .setProductName(productName)
+                .setImage(image)
                 .setPrice(BigDecimal.valueOf(Long.valueOf(price)))
                 .setWarrantyPeriod(warrantyPeriod)
                 .setRam(ram)
@@ -40,12 +50,20 @@ public class ProductCreReqDTO implements Validator {
                 .setPin(pin)
                 ;
     }
-public ProductResDTO toProductResDTO(){
-        return  new ProductResDTO()
-                .setProductName(productName)
-                .setPrice(BigDecimal.valueOf(Long.valueOf(price)));
 
-}
+    public ProductResDTO toProductResDTO(){
+            return  new ProductResDTO()
+                    .setProductName(productName)
+                    .setPrice(BigDecimal.valueOf(Long.valueOf(price)))
+                    .setWarrantyPeriod(warrantyPeriod)
+                    .setRam(ram)
+                    .setSize(size)
+                    .setColor(color)
+                    .setCamera(camera)
+                    .setOperatingSystem(operatingSystem)
+                    .setPin(pin)
+                    ;
+    }
 
     @Override
     public boolean supports(Class<?> clazz) {

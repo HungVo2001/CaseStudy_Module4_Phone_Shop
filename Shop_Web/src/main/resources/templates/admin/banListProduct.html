@@ -185,10 +185,8 @@
         const products = await page.commands.getAllProductBan();
         products.forEach(item => {
             const str = page.commands.renderProduct(item);
-            console.log(str)
             page.elements.bodyBanProduct.prepend(str)
         })
-        console.log(123)
         page.commands.handleClickRow();
     }
     page.commands.renderProduct = (obj) => {
@@ -197,7 +195,7 @@
                                <td>${obj.productName}</td>
                                <td>${obj.quantity}</td>
                                <td>${obj.branch.branchName}</td>
-                               <td>${obj.branch.branchName}</td>
+                               <td><img src="${obj.image.fileUrl}" width="100px" /></td>
                                <td>${obj.price}</td>
                                <td>
                                    <button class="btn btn-outline-success unBan" data-id="${obj.id}">
