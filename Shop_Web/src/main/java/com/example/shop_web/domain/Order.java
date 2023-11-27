@@ -38,5 +38,4 @@ public class Order {
     @JoinColumn(name = "location_region_id", referencedColumnName = "id", nullable = false)
     private LocationRegion locationRegion;
 
-
 }

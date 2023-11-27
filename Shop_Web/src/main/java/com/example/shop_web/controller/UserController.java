@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.authority.SimpleGrantedAuthority;
 //import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,22 +20,22 @@ import java.util.Collection;
 @AllArgsConstructor
 public class UserController {
 
-//    @GetMapping("/home")
-//    public String showHomePage(Model model, Authentication authentication) {
-//        if(authentication == null){
-//            return "user/layoutHome";
-//        }
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//        String username = userDetails.getUsername();
-//        model.addAttribute("username", username);
-//        // Kiểm tra vai trò và thêm vào model nếu cần
-//        if (userDetails.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
-//            model.addAttribute("isAdmin", true);
-//        } else {
-//            model.addAttribute("isUser",true);
-//        }
-//        return "user/layoutHome";
-//    }
+    @GetMapping("/home")
+    public String showHomePage(Model model, Authentication authentication) {
+        if(authentication == null){
+            return "user/layoutHome";
+        }
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        model.addAttribute("username", username);
+        // Kiểm tra vai trò và thêm vào model nếu cần
+        if (userDetails.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN"))) {
+            model.addAttribute("isAdmin", true);
+        } else {
+            model.addAttribute("isUser",true);
+        }
+        return "user/layoutHome";
+    }
 //    @GetMapping("/default")
 //    public String defaultAfterLogin(Authentication authentication) {
 //        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -46,10 +48,10 @@ public class UserController {
 //        }
 //    }
 
-    @GetMapping("/home")
-    public String showHomePage() {
-        return "user/layoutHome";
-    }
+//    @GetMapping("/home")
+//    public String showHomePage() {
+//        return "user/layoutHome";
+//    }
 
     @GetMapping("/login")
     public String showLoginPage() {
