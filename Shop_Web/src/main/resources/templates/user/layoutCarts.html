@@ -212,8 +212,8 @@
 </div>
 
 <script>
-<<<<<<< HEAD
-=======
+
+
 
     const page = {
         url: {
@@ -268,7 +268,7 @@
     page.elements.btnCloseToast = $('#btnCloseToast')
     page.elements.btnCancel = $('#cancel');
 
->>>>>>> 9e3409aaa50ad36a005624fc1f48736370a15dc7
+
     const idUser = 2;
     async function fetchUserById(idUser) {
         return await $.ajax({
@@ -282,15 +282,15 @@
                                 <td colspan="4" style="font-weight: bold; text-align: center; color: red">Total Amount</td>
                                 <td id="total_amount" colspan="2"></td>
                             </tr>`
-<<<<<<< HEAD
-    const page = {
-        url: {},
-        elements: {},
-        loadData: {},
-        commands: {}
-    }
-=======
->>>>>>> 9e3409aaa50ad36a005624fc1f48736370a15dc7
+
+    // const page = {
+    //     url: {},
+    //     elements: {},
+    //     loadData: {},
+    //     commands: {}
+    // }
+
+
     async function fetchALlCartByUser(idUser) {
         return await $.ajax({
             url: "http://localhost:8080/api/cart/" + idUser
@@ -309,12 +309,12 @@
         updateTotalAmountChosen();
 
     }
-<<<<<<< HEAD
+
     function buyNow(){
         saveCart();
         window.location.href = "http://localhost:8080/oder";
     }
-=======
+
     function backHome(){
         saveCart();
         window.location.href = "http://localhost:8080/home";
@@ -330,7 +330,7 @@
         $('#frmCreate input').removeClass('error')
         $('#frmCreate label.error').remove()
     })
->>>>>>> 9e3409aaa50ad36a005624fc1f48736370a15dc7
+
     async function deleteCD(idCartDetail){
         await $.ajax(
             {   headers: {
@@ -375,13 +375,13 @@
             updateCartDetail(cartDTUpdate)})
         console.log("SAVE CART SUCCESS!")
     }
-<<<<<<< HEAD
-    function backHome(){
-        saveCart();
-        window.location.href = "http://localhost:8080/home";
-    }
-=======
->>>>>>> 9e3409aaa50ad36a005624fc1f48736370a15dc7
+
+    // function backHome(){
+    //     saveCart();
+    //     window.location.href = "http://localhost:8080/home";
+    // }
+
+
     page.commands.renderCart = (cartDetail) => {
                         return `<tr class="cartDetailData">
                                     <td hidden><input type="hidden" name="cartChecked" value="${cartDetail.checked}">
