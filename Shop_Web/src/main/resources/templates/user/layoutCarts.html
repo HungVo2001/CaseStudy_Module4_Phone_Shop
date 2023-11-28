@@ -440,7 +440,7 @@
         page.elements.frmCreate.trigger('submit')
     })
     page.elements.frmCreate.validate({
-        onkeyup: function(element) {$(element).valid()},
+        // onkeyup: function(element) {$(element).valid()},
         onclick: false,
         onfocusout: false,
         rules: {
@@ -479,6 +479,7 @@
             this.defaultShowErrors();
         },
         submitHandler: () => {
+            saveCart();
             page.commands.createOder()
         }
     })
@@ -523,18 +524,18 @@
                 data: JSON.stringify(oderCreateDTO)
             }
         )
-            .done(() => {
+            .done((data) => {
+                console.log("done")
+                    // page.elements.modalCreate.modal('hide');
 
-                page.elements.modalCreate.modal('hide');
-
-                AppUtils.showSuccess('Successfully!!');
+                    AppUtils.showSuccess('Successfuly');
 
             }).fail((err) =>{
-            AppUtils.showSuccess('Unsuccessfully!!');
+                    AppUtils.showError('Unsuccessfully!!');
         })
             .always(() => {
                 page.elements.btnCreate.prop("disabled", false);
-                // page.elements.loading.addClass('hide')
+                page.elements.loading.addClass('hide')
                 backHome();
             });
     }
