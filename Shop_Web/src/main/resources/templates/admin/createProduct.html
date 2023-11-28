@@ -200,6 +200,7 @@
         $.each(btnEditElems, (index, item) => {
             $(item).on("click", async () => {
                 productId = $(item).data("id");
+                page.elements.branchEdit.html("");
                 await page.loadData.renderBranch(page.elements.branchEdit)
                 const product = await page.commands.getProduct(productId);
 
@@ -477,7 +478,7 @@
         const camera = page.elements.cameraEdit.val();
         const operatingSystem = page.elements.operatingEdit.val();
         const pin = page.elements.pinEdit.val();
-        const file = page.elements.imageEdit[0].files[0];
+        const file = page.elements.imageEdit[0].files[0] ? page.elements.imageEdit[0].files[0] : null;
 
         const formData = new FormData();
         formData.append('productName', productName);
@@ -490,7 +491,9 @@
         formData.append('camera', camera);
         formData.append('operatingSystem', operatingSystem);
         formData.append('pin', pin);
-        formData.append('file', file);
+        if (file != null) {
+            formData.append('file', file);
+        }
 
         const jwt = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3MDA5NzA5NDQsImV4cCI6MTcwMzU2Mjk0NH0.T-2sWplifzPbBF49IYlyUQa4WygYsgA9d0CuGbkIzXk';
 

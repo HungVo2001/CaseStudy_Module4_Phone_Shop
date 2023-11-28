@@ -7,6 +7,8 @@ import com.example.shop_web.domain.User;
 import com.example.shop_web.domain.dto.UserRegisterReqDTO;
 import com.example.shop_web.exception.DataInputException;
 import com.example.shop_web.exception.EmailExistsException;
+import com.example.shop_web.repository.CartRepository;
+import com.example.shop_web.service.cart.ICartService;
 import com.example.shop_web.service.jwt.JwtService;
 import com.example.shop_web.service.role.IRoleService;
 import com.example.shop_web.service.user.IUserService;
@@ -51,7 +53,8 @@ public class AuthAPI {
     @Autowired
     private AuthUtil authUtil;
 
-
+    @Autowired
+    private ICartService cartService;
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserRegisterReqDTO userRegisterReqDTO, BindingResult bindingResult) {
 
@@ -79,7 +82,8 @@ public class AuthAPI {
 
         try {
             userService.save(userRegisterReqDTO.toUser(optRole.get()));
-
+            User newUser = userService.getByUsername(userRegisterReqDTO.getUsername());
+            cartService.createCart(newUser);
             return new ResponseEntity<>(HttpStatus.CREATED);
 
         } catch (DataIntegrityViolationException e) {

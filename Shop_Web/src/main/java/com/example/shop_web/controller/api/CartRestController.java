@@ -14,6 +14,8 @@ import com.example.shop_web.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -38,17 +40,24 @@ public class CartRestController {
     }
     @PostMapping("/addToCart")
     public ResponseEntity<?> addToCard(@RequestBody CartDetailCreDTO cartDetailCreDTO){
-//        Optional<User> user = userRepository.findById(cartDetailCreDTO.getIdUser());
-        Optional<Cart> cart = cartRepository.findByUserId(cartDetailCreDTO.getIdUser());
-        Optional<Product> product = productRepository.findById(cartDetailCreDTO.getIdProduct());
-        if(cartDetailRepository.countAllByProductIdAndCart_Id(product.get().getId(), cart.get().getId()) == 0 ){
-            int qty = 1;
-            BigDecimal totalAmount  = product.get().getPrice().multiply(BigDecimal.valueOf(qty));
-            CartDetail cartDetail = new CartDetail().setCart(cart.get()).setQuantity(1).setChecked(false).setProduct(product.get()).setTotalAmount(totalAmount);
-            cartDetailRepository.save(cartDetail);
-            List<CartDetail> cartDetails = cartDetailRepository.getAllByUser_Id(cartDetailCreDTO.getIdUser());
-            return new ResponseEntity<>(cartDetails, HttpStatus.OK);
-        }else throw new DataInputException("Product is existing");
+//        if(authentication == null){
+//            throw new DataInputException("You must Login!!");
+//
+//        }else {
+//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//            String username = userDetails.getUsername();
+//            User userSession = userRepository.findByUsername(username).get();
+//
+            Optional<Cart> cart = cartRepository.findByUserId(cartDetailCreDTO.getIdUser());
+            Optional<Product> product = productRepository.findById(cartDetailCreDTO.getIdProduct());
+            if (cartDetailRepository.countAllByProductIdAndCart_Id(product.get().getId(), cart.get().getId()) == 0) {
+                int qty = 1;
+                BigDecimal totalAmount = product.get().getPrice().multiply(BigDecimal.valueOf(qty));
+                CartDetail cartDetail = new CartDetail().setCart(cart.get()).setQuantity(1).setChecked(false).setProduct(product.get()).setTotalAmount(totalAmount);
+                cartDetailRepository.save(cartDetail);
+                List<CartDetail> cartDetails = cartDetailRepository.getAllByUser_Id(cartDetailCreDTO.getIdUser());
+                return new ResponseEntity<>(cartDetails, HttpStatus.OK);
+            } else throw new DataInputException("Product is existing");
 
     }
     @DeleteMapping("/delete/{idCartDetail}")

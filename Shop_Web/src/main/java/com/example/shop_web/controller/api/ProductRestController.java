@@ -76,8 +76,10 @@ public class ProductRestController {
     public ResponseEntity<?> update(@Validated ProductCreReqDTO productCreReqDTO, @PathVariable Long idProduct, BindingResult bindingResult) throws IOException {
         new ProductCreReqDTO().validate(productCreReqDTO, bindingResult);
 
-        Image image = new Image();
-        imageService.save(image);
+        Image image = new Image();;
+        if (productCreReqDTO.getFile() != null) {
+            imageService.save(image);
+        }
 
         Product product = productCreReqDTO.toProduct(image);
         Product oldProduct = productService.findById(idProduct).get();
@@ -85,9 +87,15 @@ public class ProductRestController {
         product.setBranch(branch);
         product.setQuantity(oldProduct.getQuantity());
         product.setId(idProduct);
+        product.setImage(oldProduct.getImage());
         productService.save(product);
 
-        productService.uploadAndSaveImage(image, productCreReqDTO.getFile());
+        if (productCreReqDTO.getFile() != null) {
+            productService.uploadAndSaveImage(image, productCreReqDTO.getFile());
+        } else {
+            product.setImage(oldProduct.getImage());
+            productService.save(product);
+        }
 
         ProductResDTO productResDTO = productCreReqDTO.toProductResDTO();
         productResDTO.setBranch(branch.toBranchReqDTO());
