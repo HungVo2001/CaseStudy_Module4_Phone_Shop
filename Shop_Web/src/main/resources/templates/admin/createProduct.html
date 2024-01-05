@@ -554,7 +554,10 @@
                 {
                     method: 'PATCH',
                     url: page.url.banProduct + productId,
-                    data: JSON.stringify(product)
+                    data: JSON.stringify(product),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
                 }
             )
                 .done(() => {
@@ -634,12 +637,7 @@
     })
 
 
-    $.ajaxSetup({
-        headers: {
-            // "Content-type": "application/json; charset=UTF-8"
-            // "Content-type": "multipart/form-data;boundary=----WebKitFormBoundaryjYoM5SGjAWFzTMdQ;charset=UTF-8"
-        }
-    })
+
     $(async () => {
         await page.loadData.renderProduct();
         await page.loadData.renderBranch(page.elements.branchCre);

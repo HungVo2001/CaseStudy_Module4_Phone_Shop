@@ -317,6 +317,7 @@
         $('#frmCreate label.error').remove()
     })
     async function deleteCD(idCartDetail){
+        saveCart()
         await $.ajax(
             {   headers: {
                     "Content-type": "application/json; charset=UTF-8"

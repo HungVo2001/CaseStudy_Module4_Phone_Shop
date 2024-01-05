@@ -118,7 +118,7 @@
              $('#qtyCartDetail').append(data.length);
             AppUtils.showSuccess('Add to Cart successfully');
         }).fail((err) => {
-            AppUtils.showError('This product is existing!!');
+            AppUtils.showError('Add product to cart unsuccessfully!!');
         })
     }
     $(async () => {

@@ -20,4 +20,6 @@ public interface CartDetailRepository extends JpaRepository<CartDetail,Long> {
             "on c.user_id = u.id and u.id = :customerId) " +
             "as tb on cd.cart_id = tb.id", nativeQuery=true)
     List<CartDetail> getAllByUser_Id(@Param("customerId") Long customerId);
+
+
 }

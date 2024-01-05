@@ -88,10 +88,14 @@ public class ProductRestController {
         product.setQuantity(oldProduct.getQuantity());
         product.setId(idProduct);
         product.setImage(oldProduct.getImage());
+        product.setDeleted(false);
+
         productService.save(product);
 
         if (productCreReqDTO.getFile() != null) {
             productService.uploadAndSaveImage(image, productCreReqDTO.getFile());
+            product.setImage(image);
+            productService.save(product);
         } else {
             product.setImage(oldProduct.getImage());
             productService.save(product);
