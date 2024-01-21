@@ -44,4 +44,5 @@ public class OrderDetailServiceImpl  implements IOrderDetailService{
     public List<OrderDetailResDTO> findAllOrderDetailByOrderId(Long orderId) {
         return orderDetailRepository.findAllOrderDetailByOrderId(orderId);
     }
+
 }
